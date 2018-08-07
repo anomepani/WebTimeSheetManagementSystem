@@ -1,24 +1,38 @@
-﻿using EventApplicationCore.Library;
-using Microsoft.Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-using CaptchaMvc;
-using CaptchaMvc.HtmlHelpers;
-using WebTimeSheetManagement.Helpers;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using CaptchaMvc.HtmlHelpers;
+    using EventApplicationCore.Library;
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Helpers;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="LoginController" />
+    /// </summary>
     public class LoginController : Controller
     {
-        private ILogin _ILogin;
-        private IAssignRoles _IAssignRoles;
-        private ICacheManager _ICacheManager;
+        /// <summary>
+        /// Defines the _ILogin
+        /// </summary>
+        private readonly ILogin _ILogin;
+
+        /// <summary>
+        /// Defines the _IAssignRoles
+        /// </summary>
+        private readonly IAssignRoles _IAssignRoles;
+
+        /// <summary>
+        /// Defines the _ICacheManager
+        /// </summary>
+        private readonly ICacheManager _ICacheManager;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoginController"/> class.
+        /// </summary>
         public LoginController()
         {
             _ILogin = new LoginConcrete();
@@ -26,12 +40,21 @@ namespace WebTimeSheetManagement.Controllers
             _ICacheManager = new CacheManager();
         }
 
+        /// <summary>
+        /// The Login
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult Login()
         {
             return View();
         }
 
+        /// <summary>
+        /// The Login
+        /// </summary>
+        /// <param name="loginViewModel">The loginViewModel<see cref="LoginViewModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel loginViewModel)
@@ -61,7 +84,7 @@ namespace WebTimeSheetManagement.Controllers
                         else
                         {
                             var RoleID = result.RoleID;
-                            remove_Anonymous_Cookies(); //Remove Anonymous_Cookies
+                            Remove_Anonymous_Cookies(); //Remove Anonymous_Cookies
 
                             Session["RoleID"] = Convert.ToString(result.RoleID);
                             Session["Username"] = Convert.ToString(result.Username);
@@ -114,10 +137,13 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Logout
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult Logout()
         {
-
             try
             {
                 if (!string.IsNullOrEmpty(Convert.ToString(Session["SuperAdmin"])))
@@ -131,9 +157,11 @@ namespace WebTimeSheetManagement.Controllers
                 Response.Cache.SetExpires(DateTime.Now.AddSeconds(-1));
                 Response.Cache.SetNoStore();
 
-                HttpCookie Cookies = new HttpCookie("WebTime");
-                Cookies.Value = "";
-                Cookies.Expires = DateTime.Now.AddHours(-1);
+                HttpCookie Cookies = new HttpCookie("WebTime")
+                {
+                    Value = "",
+                    Expires = DateTime.Now.AddHours(-1)
+                };
                 Response.Cookies.Add(Cookies);
                 HttpContext.Session.Clear();
                 Session.Abandon();
@@ -145,22 +173,25 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Remove_Anonymous_Cookies
+        /// </summary>
         [NonAction]
-        public void remove_Anonymous_Cookies()
+        public void Remove_Anonymous_Cookies()
         {
             try
             {
-
                 if (Request.Cookies["WebTime"] != null)
                 {
-                    var option = new HttpCookie("WebTime");
-                    option.Expires = DateTime.Now.AddDays(-1);
+                    var option = new HttpCookie("WebTime")
+                    {
+                        Expires = DateTime.Now.AddDays(-1)
+                    };
                     Response.Cookies.Add(option);
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

@@ -1,22 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="ShowAllTimeSheetController" />
+    /// </summary>
     [ValidateAdminSession]
     public class ShowAllTimeSheetController : Controller
     {
+        /// <summary>
+        /// Defines the _IProject
+        /// </summary>
+        private readonly IProject _IProject;
 
-        IProject _IProject;
-        IUsers _IUsers;
-        ITimeSheet _ITimeSheet;
+        /// <summary>
+        /// Defines the _IUsers
+        /// </summary>
+        private readonly IUsers _IUsers;
+
+        /// <summary>
+        /// Defines the _ITimeSheet
+        /// </summary>
+        private readonly ITimeSheet _ITimeSheet;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShowAllTimeSheetController"/> class.
+        /// </summary>
         public ShowAllTimeSheetController()
         {
             _IProject = new ProjectConcrete();
@@ -25,11 +41,19 @@ namespace WebTimeSheetManagement.Controllers
         }
 
         // GET: ShowAllTimeSheet
+        /// <summary>
+        /// The TimeSheet
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult TimeSheet()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadTimeSheetData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadTimeSheetData()
         {
             try
@@ -55,9 +79,13 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The Details
+        /// </summary>
+        /// <param name="id">The id<see cref="string"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Details(string id)
         {
             try
@@ -67,21 +95,26 @@ namespace WebTimeSheetManagement.Controllers
                     return RedirectToAction("TimeSheet", "AllTimeSheet");
                 }
 
-                MainTimeSheetView objMT = new MainTimeSheetView();
-                objMT.ListTimeSheetDetails = _ITimeSheet.TimesheetDetailsbyTimeSheetMasterID(Convert.ToInt32(id));
-                objMT.ListofProjectNames = _ITimeSheet.GetProjectNamesbyTimeSheetMasterID(Convert.ToInt32(id));
-                objMT.ListofPeriods = _ITimeSheet.GetPeriodsbyTimeSheetMasterID(Convert.ToInt32(id));
-                objMT.ListoDayofWeek = DayofWeek();
-                objMT.TimeSheetMasterID = Convert.ToInt32(id);
+                MainTimeSheetView objMT = new MainTimeSheetView
+                {
+                    ListTimeSheetDetails = _ITimeSheet.TimesheetDetailsbyTimeSheetMasterID(Convert.ToInt32(id)),
+                    ListofProjectNames = _ITimeSheet.GetProjectNamesbyTimeSheetMasterID(Convert.ToInt32(id)),
+                    ListofPeriods = _ITimeSheet.GetPeriodsbyTimeSheetMasterID(Convert.ToInt32(id)),
+                    ListoDayofWeek = DayofWeek(),
+                    TimeSheetMasterID = Convert.ToInt32(id)
+                };
                 return View(objMT);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The DayofWeek
+        /// </summary>
+        /// <returns>The <see cref="List{string}"/></returns>
         [NonAction]
         public List<string> DayofWeek()
         {
@@ -97,6 +130,11 @@ namespace WebTimeSheetManagement.Controllers
             return li;
         }
 
+        /// <summary>
+        /// The Approval
+        /// </summary>
+        /// <param name="TimeSheetApproval">The TimeSheetApproval<see cref="TimeSheetApproval"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Approval(TimeSheetApproval TimeSheetApproval)
         {
             try
@@ -122,16 +160,19 @@ namespace WebTimeSheetManagement.Controllers
                     _ITimeSheet.InsertTimeSheetAuditLog(InsertTimeSheetAudit(TimeSheetApproval, 2));
                 }
 
-
                 return Json(true);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The Rejected
+        /// </summary>
+        /// <param name="TimeSheetApproval">The TimeSheetApproval<see cref="TimeSheetApproval"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Rejected(TimeSheetApproval TimeSheetApproval)
         {
             try
@@ -157,29 +198,35 @@ namespace WebTimeSheetManagement.Controllers
                     _ITimeSheet.InsertTimeSheetAuditLog(InsertTimeSheetAudit(TimeSheetApproval, 3));
                 }
 
-
                 return Json(true);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The InsertTimeSheetAudit
+        /// </summary>
+        /// <param name="TimeSheetApproval">The TimeSheetApproval<see cref="TimeSheetApproval"/></param>
+        /// <param name="Status">The Status<see cref="int"/></param>
+        /// <returns>The <see cref="TimeSheetAuditTB"/></returns>
         private TimeSheetAuditTB InsertTimeSheetAudit(TimeSheetApproval TimeSheetApproval, int Status)
         {
             try
             {
-                TimeSheetAuditTB objAuditTB = new TimeSheetAuditTB();
-                objAuditTB.ApprovalTimeSheetLogID = 0;
-                objAuditTB.TimeSheetID = TimeSheetApproval.TimeSheetMasterID;
-                objAuditTB.Status = Status;
-                objAuditTB.CreatedOn = DateTime.Now;
-                objAuditTB.Comment = TimeSheetApproval.Comment;
-                objAuditTB.ApprovalUser = Convert.ToInt32(Session["AdminUser"]);
-                objAuditTB.ProcessedDate = DateTime.Now;
-                objAuditTB.UserID = _IUsers.GetUserIDbyTimesheetID(TimeSheetApproval.TimeSheetMasterID);
+                TimeSheetAuditTB objAuditTB = new TimeSheetAuditTB
+                {
+                    ApprovalTimeSheetLogID = 0,
+                    TimeSheetID = TimeSheetApproval.TimeSheetMasterID,
+                    Status = Status,
+                    CreatedOn = DateTime.Now,
+                    Comment = TimeSheetApproval.Comment,
+                    ApprovalUser = Convert.ToInt32(Session["AdminUser"]),
+                    ProcessedDate = DateTime.Now,
+                    UserID = _IUsers.GetUserIDbyTimesheetID(TimeSheetApproval.TimeSheetMasterID)
+                };
                 return objAuditTB;
             }
             catch (Exception)
@@ -188,6 +235,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Delete
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult Delete(int TimeSheetMasterID)
         {
             try
@@ -214,22 +266,37 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
-
+        /// <summary>
+        /// The SubmittedTimeSheet
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult SubmittedTimeSheet()
         {
             return View();
         }
 
+        /// <summary>
+        /// The ApprovedTimeSheet
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult ApprovedTimeSheet()
         {
             return View();
         }
 
+        /// <summary>
+        /// The RejectedTimeSheet
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult RejectedTimeSheet()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadSubmittedTData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadSubmittedTData()
         {
             try
@@ -255,9 +322,12 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The LoadRejectedData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadRejectedData()
         {
             try
@@ -283,9 +353,12 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The LoadApprovedData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadApprovedData()
         {
             try
@@ -311,11 +384,6 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
-
-     
-
-
     }
 }

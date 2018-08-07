@@ -1,23 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebTimeSheetManagement.Models
+﻿namespace WebTimeSheetManagement.Models
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    /// <summary>
+    /// Defines the <see cref="DescriptionTB" />
+    /// </summary>
     [Table("DescriptionTB")]
     public class DescriptionTB
     {
+        /// <summary>
+        /// Gets or sets the DescriptionID
+        /// </summary>
         [Key]
         public int DescriptionID { get; set; }
-        public string Description { get; set; }
-        public int? ProjectID { get; set; }
-        public int? TimeSheetMasterID { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public int? UserID { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Description
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ProjectID
+        /// </summary>
+        public int? ProjectID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the TimeSheetMasterID
+        /// </summary>
+        public int? TimeSheetMasterID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CreatedOn
+        /// </summary>
+        public DateTime? CreatedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UserID
+        /// </summary>
+        public int? UserID { get; set; }
     }
 }

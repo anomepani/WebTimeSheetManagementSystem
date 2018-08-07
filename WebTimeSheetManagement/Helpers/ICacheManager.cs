@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebTimeSheetManagement.Helpers
+﻿namespace WebTimeSheetManagement.Helpers
 {
+    /// <summary>
+    /// Defines the <see cref="ICacheManager" />
+    /// </summary>
     public interface ICacheManager
     {
         /// <summary>
@@ -20,6 +17,7 @@ namespace WebTimeSheetManagement.Helpers
         /// </summary>
         /// <typeparam name="T">the class.</typeparam>
         /// <param name="key">The object cache key.</param>
+        /// <returns>The <see cref="T"/></returns>
         T Get<T>(string key) where T : class;
 
         /// <summary>

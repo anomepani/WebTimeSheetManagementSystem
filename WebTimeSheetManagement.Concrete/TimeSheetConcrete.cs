@@ -1,21 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-using System.Linq.Dynamic;
-using System.Data.Entity.SqlServer;
-using System.Data.Entity.Core.Objects;
-using System.Data.SqlClient;
-using System.Configuration;
-using Dapper;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using Dapper;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data.Entity.Core.Objects;
+    using System.Data.Entity.SqlServer;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Linq.Dynamic;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="TimeSheetConcrete" />
+    /// </summary>
     public class TimeSheetConcrete : ITimeSheet
     {
+        /// <summary>
+        /// The AddTimeSheetMaster
+        /// </summary>
+        /// <param name="TimeSheetMaster">The TimeSheetMaster<see cref="TimeSheetMaster"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int AddTimeSheetMaster(TimeSheetMaster TimeSheetMaster)
         {
             try
@@ -34,6 +40,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The AddTimeSheetDetail
+        /// </summary>
+        /// <param name="TimeSheetDetails">The TimeSheetDetails<see cref="TimeSheetDetails"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int AddTimeSheetDetail(TimeSheetDetails TimeSheetDetails)
         {
             try
@@ -52,6 +63,12 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The CheckIsDateAlreadyUsed
+        /// </summary>
+        /// <param name="FromDate">The FromDate<see cref="DateTime"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool CheckIsDateAlreadyUsed(DateTime FromDate, int UserID)
         {
             try
@@ -78,6 +95,14 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowTimeSheet
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{TimeSheetMasterView}"/></returns>
         public IQueryable<TimeSheetMasterView> ShowTimeSheet(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -113,9 +138,14 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The TimesheetDetailsbyTimeSheetMasterID
+        /// </summary>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <returns>The <see cref="List{TimeSheetDetailsView}"/></returns>
         public List<TimeSheetDetailsView> TimesheetDetailsbyTimeSheetMasterID(int UserID, int TimeSheetMasterID)
         {
             using (var _context = new DatabaseContext())
@@ -143,6 +173,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The TimesheetDetailsbyTimeSheetMasterID
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <returns>The <see cref="List{TimeSheetDetailsView}"/></returns>
         public List<TimeSheetDetailsView> TimesheetDetailsbyTimeSheetMasterID(int TimeSheetMasterID)
         {
             using (var _context = new DatabaseContext())
@@ -170,11 +205,16 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The DeleteTimesheetByTimeSheetMasterID
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int DeleteTimesheetByTimeSheetMasterID(int TimeSheetMasterID, int UserID)
         {
             try
             {
-
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
                 {
                     var param = new DynamicParameters();
@@ -182,15 +222,21 @@ namespace WebTimeSheetManagement.Concrete
                     param.Add("@UserID", UserID);
                     return con.Execute("Usp_DeleteTimeSheet", param, null, 0, System.Data.CommandType.StoredProcedure);
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The ShowAllTimeSheet
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{TimeSheetMasterView}"/></returns>
         public IQueryable<TimeSheetMasterView> ShowAllTimeSheet(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -214,7 +260,6 @@ namespace WebTimeSheetManagement.Concrete
                         + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
                        ).Replace(" ", "0"),
 
-
                                            ToDate =
                      (
                      EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
@@ -232,9 +277,6 @@ namespace WebTimeSheetManagement.Concrete
                                            Username = registration.Username,
                                            SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate).ToString()
 
-
-
-
                                        });
 
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
@@ -247,9 +289,13 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The GetPeriodsbyTimeSheetMasterID
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <returns>The <see cref="List{GetPeriods}"/></returns>
         public List<GetPeriods> GetPeriodsbyTimeSheetMasterID(int TimeSheetMasterID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -276,6 +322,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetProjectNamesbyTimeSheetMasterID
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <returns>The <see cref="List{GetProjectNames}"/></returns>
         public List<GetProjectNames> GetProjectNamesbyTimeSheetMasterID(int TimeSheetMasterID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -302,6 +353,12 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The UpdateTimeSheetStatus
+        /// </summary>
+        /// <param name="timesheetapprovalmodel">The timesheetapprovalmodel<see cref="TimeSheetApproval"/></param>
+        /// <param name="Status">The Status<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool UpdateTimeSheetStatus(TimeSheetApproval timesheetapprovalmodel, int Status)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -335,6 +392,10 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The InsertTimeSheetAuditLog
+        /// </summary>
+        /// <param name="timesheetaudittb">The timesheetaudittb<see cref="TimeSheetAuditTB"/></param>
         public void InsertTimeSheetAuditLog(TimeSheetAuditTB timesheetaudittb)
         {
             try
@@ -351,6 +412,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The DeleteTimesheetByOnlyTimeSheetMasterID
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int DeleteTimesheetByOnlyTimeSheetMasterID(int TimeSheetMasterID)
         {
             int resultTimeSheetMaster = 0;
@@ -359,7 +425,6 @@ namespace WebTimeSheetManagement.Concrete
             {
                 using (var _context = new DatabaseContext())
                 {
-
                     var timesheetcount = (from ex in _context.TimeSheetMaster
                                           where ex.TimeSheetMasterID == TimeSheetMasterID
                                           select ex).Count();
@@ -380,14 +445,12 @@ namespace WebTimeSheetManagement.Concrete
 
                     if (timesheetdetailscount > 0)
                     {
-
                         var timesheetdetails = (from ex in _context.TimeSheetDetails
                                                 where ex.TimeSheetMasterID == TimeSheetMasterID
                                                 select ex).ToList();
 
                         _context.TimeSheetDetails.RemoveRange(timesheetdetails);
                         resultTimeSheetDetails = _context.SaveChanges();
-
                     }
 
                     if (resultTimeSheetMaster > 0 || resultTimeSheetDetails > 0)
@@ -398,16 +461,19 @@ namespace WebTimeSheetManagement.Concrete
                     {
                         return 0;
                     }
-
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The InsertDescription
+        /// </summary>
+        /// <param name="DescriptionTB">The DescriptionTB<see cref="DescriptionTB"/></param>
+        /// <returns>The <see cref="int?"/></returns>
         public int? InsertDescription(DescriptionTB DescriptionTB)
         {
             using (var _context = new DatabaseContext())
@@ -419,6 +485,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetTimeSheetsCountByAdminID
+        /// </summary>
+        /// <param name="AdminID">The AdminID<see cref="string"/></param>
+        /// <returns>The <see cref="DisplayViewModel"/></returns>
         public DisplayViewModel GetTimeSheetsCountByAdminID(string AdminID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -429,6 +500,14 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowAllApprovedTimeSheet
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{TimeSheetMasterView}"/></returns>
         public IQueryable<TimeSheetMasterView> ShowAllApprovedTimeSheet(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -453,7 +532,6 @@ namespace WebTimeSheetManagement.Concrete
                         + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
                        ).Replace(" ", "0"),
 
-
                                            ToDate =
                      (
                      EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
@@ -471,9 +549,6 @@ namespace WebTimeSheetManagement.Concrete
                                            Username = registration.Username,
                                            SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate).ToString()
 
-
-
-
                                        });
 
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
@@ -486,9 +561,16 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The ShowAllRejectTimeSheet
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{TimeSheetMasterView}"/></returns>
         public IQueryable<TimeSheetMasterView> ShowAllRejectTimeSheet(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -513,7 +595,6 @@ namespace WebTimeSheetManagement.Concrete
                         + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
                        ).Replace(" ", "0"),
 
-
                                            ToDate =
                      (
                      EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
@@ -531,9 +612,6 @@ namespace WebTimeSheetManagement.Concrete
                                            Username = registration.Username,
                                            SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate).ToString()
 
-
-
-
                                        });
 
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
@@ -546,9 +624,16 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The ShowAllSubmittedTimeSheet
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{TimeSheetMasterView}"/></returns>
         public IQueryable<TimeSheetMasterView> ShowAllSubmittedTimeSheet(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -573,7 +658,6 @@ namespace WebTimeSheetManagement.Concrete
                         + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
                        ).Replace(" ", "0"),
 
-
                                            ToDate =
                      (
                      EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
@@ -591,9 +675,6 @@ namespace WebTimeSheetManagement.Concrete
                                            Username = registration.Username,
                                            SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate).ToString()
 
-
-
-
                                        });
 
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
@@ -606,9 +687,13 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The GetTimeSheetsCountByUserID
+        /// </summary>
+        /// <param name="UserID">The UserID<see cref="string"/></param>
+        /// <returns>The <see cref="DisplayViewModel"/></returns>
         public DisplayViewModel GetTimeSheetsCountByUserID(string UserID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -619,6 +704,15 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowTimeSheetStatus
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <param name="TimeSheetStatus">The TimeSheetStatus<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{TimeSheetMasterView}"/></returns>
         public IQueryable<TimeSheetMasterView> ShowTimeSheetStatus(string sortColumn, string sortColumnDir, string Search, int UserID, int TimeSheetStatus)
         {
             var _context = new DatabaseContext();
@@ -653,9 +747,15 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The UpdateTimeSheetAuditStatus
+        /// </summary>
+        /// <param name="TimeSheetID">The TimeSheetID<see cref="int"/></param>
+        /// <param name="Comment">The Comment<see cref="string"/></param>
+        /// <param name="Status">The Status<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool UpdateTimeSheetAuditStatus(int TimeSheetID, string Comment, int Status)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -689,6 +789,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The IsTimesheetALreadyProcessed
+        /// </summary>
+        /// <param name="TimeSheetID">The TimeSheetID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool IsTimesheetALreadyProcessed(int TimeSheetID)
         {
             using (var _context = new DatabaseContext())

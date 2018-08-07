@@ -1,29 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="DemoAssignController" />
+    /// </summary>
     public class DemoAssignController : Controller
     {
-        private IAssignRoles _IAssignRoles;
+        /// <summary>
+        /// Defines the _IAssignRoles
+        /// </summary>
+        private readonly IAssignRoles _IAssignRoles;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DemoAssignController"/> class.
+        /// </summary>
         public DemoAssignController()
         {
             _IAssignRoles = new AssignRolesConcrete();
         }
+
         // GET: DemoAssign
+        /// <summary>
+        /// The Index
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Index()
         {
             try
             {
-                AssignRolesModel assignRolesModel = new AssignRolesModel();
-                assignRolesModel.ListofAdmins = _IAssignRoles.ListofAdmins();
-                assignRolesModel.ListofUser = _IAssignRoles.GetListofUnAssignedUsers();
+                AssignRolesModel assignRolesModel = new AssignRolesModel
+                {
+                    ListofAdmins = _IAssignRoles.ListofAdmins(),
+                    ListofUser = _IAssignRoles.GetListofUnAssignedUsers()
+                };
                 return View(assignRolesModel);
             }
             catch (Exception)
@@ -32,8 +47,14 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Index
+        /// </summary>
+        /// <param name="list">The list<see cref="List{UserModel}"/></param>
+        /// <param name="assignRolesModel">The assignRolesModel<see cref="AssignRolesModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
-        public ActionResult Index(List<UserModel> list ,AssignRolesModel assignRolesModel)
+        public ActionResult Index(List<UserModel> list, AssignRolesModel assignRolesModel)
         {
             try
             {
@@ -52,9 +73,11 @@ namespace WebTimeSheetManagement.Controllers
                     TempData["MessageRoles"] = "Roles Assigned Successfully!";
                 }
 
-                assignRolesModel = new AssignRolesModel();
-                assignRolesModel.ListofAdmins = _IAssignRoles.ListofAdmins();
-                assignRolesModel.ListofUser = _IAssignRoles.GetListofUnAssignedUsers();
+                assignRolesModel = new AssignRolesModel
+                {
+                    ListofAdmins = _IAssignRoles.ListofAdmins(),
+                    ListofUser = _IAssignRoles.GetListofUnAssignedUsers()
+                };
 
                 return RedirectToAction("Index");
             }

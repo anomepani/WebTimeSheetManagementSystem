@@ -1,32 +1,86 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebTimeSheetManagement.Models
+﻿namespace WebTimeSheetManagement.Models
 {
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// Defines the <see cref="TimeSheetDetailsView" />
+    /// </summary>
     public class TimeSheetDetailsView
     {
+        /// <summary>
+        /// Gets or sets the TimeSheetID
+        /// </summary>
         public int TimeSheetID { get; set; }
-        public string DaysofWeek { get; set; }
-        public int? Hours { get; set; }
-        public string Period { get; set; }
-        public int? ProjectID { get; set; }
-        public int UserID { get; set; }
-        public string CreatedOn { get; set; }
-        public int TimeSheetMasterID { get; set; }
-        public string ProjectName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the DaysofWeek
+        /// </summary>
+        public string DaysofWeek { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Hours
+        /// </summary>
+        public int? Hours { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Period
+        /// </summary>
+        public string Period { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ProjectID
+        /// </summary>
+        public int? ProjectID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UserID
+        /// </summary>
+        public int UserID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CreatedOn
+        /// </summary>
+        public string CreatedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the TimeSheetMasterID
+        /// </summary>
+        public int TimeSheetMasterID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ProjectName
+        /// </summary>
+        public string ProjectName { get; set; }
     }
 
+    /// <summary>
+    /// Defines the <see cref="MainTimeSheetView" />
+    /// </summary>
     public class MainTimeSheetView
     {
+        /// <summary>
+        /// Gets or sets the ListTimeSheetDetails
+        /// </summary>
         public List<TimeSheetDetailsView> ListTimeSheetDetails { get; set; }
-        public  List<GetPeriods> ListofPeriods { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ListofPeriods
+        /// </summary>
+        public List<GetPeriods> ListofPeriods { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ListofProjectNames
+        /// </summary>
         public List<GetProjectNames> ListofProjectNames { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ListoDayofWeek
+        /// </summary>
         public List<string> ListoDayofWeek { get; set; }
+
+        /// <summary>
+        /// Gets or sets the TimeSheetMasterID
+        /// </summary>
         public int TimeSheetMasterID { get; set; }
     }
-
 }

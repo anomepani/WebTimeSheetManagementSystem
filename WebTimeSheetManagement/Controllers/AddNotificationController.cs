@@ -1,25 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Hubs;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Hubs;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="AddNotificationController" />
+    /// </summary>
     [ValidateSuperAdminSession]
     public class AddNotificationController : Controller
     {
-        INotification _INotification;
+        /// <summary>
+        /// Defines the _INotification
+        /// </summary>
+        private readonly INotification _INotification;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddNotificationController"/> class.
+        /// </summary>
         public AddNotificationController()
         {
             _INotification = new NotificationConcrete();
         }
 
+        /// <summary>
+        /// The Add
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         // GET: AddNotification
         public ActionResult Add()
@@ -27,7 +39,11 @@ namespace WebTimeSheetManagement.Controllers
             return View();
         }
 
-
+        /// <summary>
+        /// The Add
+        /// </summary>
+        /// <param name="NotificationsTB">The NotificationsTB<see cref="NotificationsTB"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(NotificationsTB NotificationsTB)
@@ -62,14 +78,20 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
-
+        /// <summary>
+        /// The AllNotification
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult AllNotification()
         {
             return View();
         }
 
-
+        /// <summary>
+        /// The LoadNotificationData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadNotificationData()
         {
             try
@@ -95,9 +117,13 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The DeActivateNotification
+        /// </summary>
+        /// <param name="NotificationID">The NotificationID<see cref="string"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult DeActivateNotification(string NotificationID)
         {
             try

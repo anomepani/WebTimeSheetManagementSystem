@@ -1,11 +1,17 @@
-﻿using System.Web;
-using System.Web.Optimization;
-
-namespace WebTimeSheetManagement
+﻿namespace WebTimeSheetManagement
 {
+    using System.Web.Optimization;
+
+    /// <summary>
+    /// Defines the <see cref="BundleConfig" />
+    /// </summary>
     public class BundleConfig
     {
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+        /// <summary>
+        /// The RegisterBundles
+        /// </summary>
+        /// <param name="bundles">The bundles<see cref="BundleCollection"/></param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

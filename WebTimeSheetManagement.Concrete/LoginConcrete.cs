@@ -1,18 +1,24 @@
-﻿using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using Dapper;
+    using System;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="LoginConcrete" />
+    /// </summary>
     public class LoginConcrete : ILogin
     {
+        /// <summary>
+        /// The ValidateUser
+        /// </summary>
+        /// <param name="userName">The userName<see cref="string"/></param>
+        /// <param name="passWord">The passWord<see cref="string"/></param>
+        /// <returns>The <see cref="Registration"/></returns>
         public Registration ValidateUser(string userName, string passWord)
         {
             try
@@ -28,11 +34,16 @@ namespace WebTimeSheetManagement.Concrete
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The UpdatePassword
+        /// </summary>
+        /// <param name="NewPassword">The NewPassword<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool UpdatePassword(string NewPassword, int UserID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -64,6 +75,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetPasswordbyUserID
+        /// </summary>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="string"/></returns>
         public string GetPasswordbyUserID(int UserID)
         {
             try
@@ -82,7 +98,5 @@ namespace WebTimeSheetManagement.Concrete
                 throw;
             }
         }
-
-
     }
 }

@@ -1,16 +1,24 @@
-﻿using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Helpers
+﻿namespace WebTimeSheetManagement.Helpers
 {
+    using Dapper;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="MethodonViews" />
+    /// </summary>
     public static class MethodonViews
     {
+        /// <summary>
+        /// The GetHoursbyTimeSheetMasterID
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <param name="ProjectID">The ProjectID<see cref="int"/></param>
+        /// <returns>The <see cref="List{GetHours}"/></returns>
         public static List<GetHours> GetHoursbyTimeSheetMasterID(int TimeSheetMasterID, int ProjectID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -38,6 +46,12 @@ namespace WebTimeSheetManagement.Helpers
             }
         }
 
+        /// <summary>
+        /// The GetDescriptionbyTimeSheetMasterID
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <param name="ProjectID">The ProjectID<see cref="int"/></param>
+        /// <returns>The <see cref="string"/></returns>
         public static string GetDescriptionbyTimeSheetMasterID(int TimeSheetMasterID, int ProjectID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -64,6 +78,5 @@ namespace WebTimeSheetManagement.Helpers
                 }
             }
         }
-
     }
 }

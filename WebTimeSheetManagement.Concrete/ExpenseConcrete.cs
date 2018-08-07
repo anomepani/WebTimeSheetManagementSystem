@@ -1,30 +1,38 @@
-﻿using System;
-using System.Linq;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-using Dapper;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.Data.Entity.SqlServer;
-using System.Linq.Dynamic;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using Dapper;
+    using System;
+    using System.Configuration;
+    using System.Data.Entity.SqlServer;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Linq.Dynamic;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="ExpenseConcrete" />
+    /// </summary>
     public class ExpenseConcrete : IExpense
     {
+        /// <summary>
+        /// The AddExpense
+        /// </summary>
+        /// <param name="ExpenseModel">The ExpenseModel<see cref="ExpenseModel"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int AddExpense(ExpenseModel ExpenseModel)
         {
             try
             {
                 using (var _context = new DatabaseContext())
                 {
-                    ExpenseModel.HotelBills = ExpenseModel.HotelBills == null ? 0 : ExpenseModel.HotelBills;
-                    ExpenseModel.TravelBills = ExpenseModel.TravelBills == null ? 0 : ExpenseModel.TravelBills;
-                    ExpenseModel.MealsBills = ExpenseModel.MealsBills == null ? 0 : ExpenseModel.MealsBills;
-                    ExpenseModel.LandLineBills = ExpenseModel.LandLineBills == null ? 0 : ExpenseModel.LandLineBills;
-                    ExpenseModel.TransportBills = ExpenseModel.TransportBills == null ? 0 : ExpenseModel.TransportBills;
-                    ExpenseModel.MobileBills = ExpenseModel.MobileBills == null ? 0 : ExpenseModel.MobileBills;
-                    ExpenseModel.Miscellaneous = ExpenseModel.Miscellaneous == null ? 0 : ExpenseModel.Miscellaneous;
+                    ExpenseModel.HotelBills = ExpenseModel.HotelBills ?? 0;
+                    ExpenseModel.TravelBills = ExpenseModel.TravelBills ?? 0;
+                    ExpenseModel.MealsBills = ExpenseModel.MealsBills ?? 0;
+                    ExpenseModel.LandLineBills = ExpenseModel.LandLineBills ?? 0;
+                    ExpenseModel.TransportBills = ExpenseModel.TransportBills ?? 0;
+                    ExpenseModel.MobileBills = ExpenseModel.MobileBills ?? 0;
+                    ExpenseModel.Miscellaneous = ExpenseModel.Miscellaneous ?? 0;
 
                     _context.ExpenseModel.Add(ExpenseModel);
                     _context.SaveChanges();
@@ -49,6 +57,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The CheckIsDateAlreadyUsed
+        /// </summary>
+        /// <param name="FromDate">The FromDate<see cref="DateTime?"/></param>
+        /// <param name="ToDate">The ToDate<see cref="DateTime?"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool CheckIsDateAlreadyUsed(DateTime? FromDate, DateTime? ToDate, int UserID)
         {
             try
@@ -77,6 +92,14 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowExpense
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{ExpenseModelView}"/></returns>
         public IQueryable<ExpenseModelView> ShowExpense(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -120,9 +143,14 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The IsExpenseSubmitted
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool IsExpenseSubmitted(int ExpenseID, int UserID)
         {
             using (var _context = new DatabaseContext())
@@ -142,9 +170,14 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
-        public int DeleteExpensetByExpenseID(int ExpenseID ,int UserID)
+        /// <summary>
+        /// The DeleteExpensetByExpenseID
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="int"/></returns>
+        public int DeleteExpensetByExpenseID(int ExpenseID, int UserID)
         {
-
             try
             {
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -157,11 +190,18 @@ namespace WebTimeSheetManagement.Concrete
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The ShowAllExpense
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{ExpenseModelView}"/></returns>
         public IQueryable<ExpenseModelView> ShowAllExpense(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -209,16 +249,19 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The ExpenseDetailsbyExpenseID
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <returns>The <see cref="ExpenseModelView"/></returns>
         public ExpenseModelView ExpenseDetailsbyExpenseID(int ExpenseID)
         {
             try
             {
                 using (DatabaseContext _context = new DatabaseContext())
                 {
-
                     var resultExpense = (from expense in _context.ExpenseModel
                                          where expense.ExpenseID == ExpenseID
                                          join project in _context.ProjectMaster on expense.ProjectID equals project.ProjectID
@@ -260,6 +303,12 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The UpdateExpenseStatus
+        /// </summary>
+        /// <param name="ExpenseApprovalModel">The ExpenseApprovalModel<see cref="ExpenseApprovalModel"/></param>
+        /// <param name="ExpenseStatus">The ExpenseStatus<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool UpdateExpenseStatus(ExpenseApprovalModel ExpenseApprovalModel, int ExpenseStatus)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -293,6 +342,10 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The InsertExpenseAuditLog
+        /// </summary>
+        /// <param name="expenseaudittb">The expenseaudittb<see cref="ExpenseAuditTB"/></param>
         public void InsertExpenseAuditLog(ExpenseAuditTB expenseaudittb)
         {
             try
@@ -309,6 +362,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetExpenseAuditCountByAdminID
+        /// </summary>
+        /// <param name="AdminID">The AdminID<see cref="string"/></param>
+        /// <returns>The <see cref="DisplayViewModel"/></returns>
         public DisplayViewModel GetExpenseAuditCountByAdminID(string AdminID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -319,6 +377,14 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowAllSubmittedExpense
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{ExpenseModelView}"/></returns>
         public IQueryable<ExpenseModelView> ShowAllSubmittedExpense(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -367,10 +433,16 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
-
+        /// <summary>
+        /// The ShowAllApprovedExpense
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{ExpenseModelView}"/></returns>
         public IQueryable<ExpenseModelView> ShowAllApprovedExpense(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -419,9 +491,16 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The ShowAllRejectedExpense
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{ExpenseModelView}"/></returns>
         public IQueryable<ExpenseModelView> ShowAllRejectedExpense(string sortColumn, string sortColumnDir, string Search, int UserID)
         {
             var _context = new DatabaseContext();
@@ -470,9 +549,13 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The GetExpenseAuditCountByUserID
+        /// </summary>
+        /// <param name="UserID">The UserID<see cref="string"/></param>
+        /// <returns>The <see cref="DisplayViewModel"/></returns>
         public DisplayViewModel GetExpenseAuditCountByUserID(string UserID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -483,6 +566,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The UpdateExpenseAuditStatus
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <param name="Comment">The Comment<see cref="string"/></param>
+        /// <param name="Status">The Status<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool UpdateExpenseAuditStatus(int ExpenseID, string Comment, int Status)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -516,6 +606,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The IsExpenseALreadyProcessed
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool IsExpenseALreadyProcessed(int ExpenseID)
         {
             using (var _context = new DatabaseContext())
@@ -535,7 +630,15 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
-
+        /// <summary>
+        /// The ShowExpenseStatus
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <param name="ExpenseStatus">The ExpenseStatus<see cref="int"/></param>
+        /// <returns>The <see cref="IQueryable{ExpenseModelView}"/></returns>
         public IQueryable<ExpenseModelView> ShowExpenseStatus(string sortColumn, string sortColumnDir, string Search, int UserID, int ExpenseStatus)
         {
             var _context = new DatabaseContext();
@@ -584,9 +687,6 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
-    
-
     }
 }

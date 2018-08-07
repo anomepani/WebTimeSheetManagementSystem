@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
-
-namespace WebTimeSheetManagement.Hubs
+﻿namespace WebTimeSheetManagement.Hubs
 {
+    using Microsoft.AspNet.SignalR;
+    using Microsoft.AspNet.SignalR.Hubs;
+    using System;
 
+    /// <summary>
+    /// Defines the <see cref="MyNotificationHub" />
+    /// </summary>
     [HubName("mynotificationHub")]
     public class MyNotificationHub : Hub
     {
+        /// <summary>
+        /// The Send
+        /// </summary>
         public static void Send()
         {
             try

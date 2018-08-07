@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.Caching;
-namespace WebTimeSheetManagement.Helpers
+﻿namespace WebTimeSheetManagement.Helpers
 {
+    using System.Runtime.Caching;
+
+    /// <summary>
+    /// Defines the <see cref="CacheManager" />
+    /// </summary>
     public class CacheManager : ICacheManager
     {
         /// <summary>
-        /// <see cref="ICacheManager.Add(string, object)"/> 
+        /// <see cref="ICacheManager.Add(string, object)"/>
         /// </summary>
         /// <param name="key"><see cref="ICacheManager.Add(string, object)"/></param>
         /// <param name="value"><see cref="ICacheManager.Add(string, object)"/></param>
@@ -26,10 +25,11 @@ namespace WebTimeSheetManagement.Helpers
         }
 
         /// <summary>
-        /// <see cref="ICacheManager.Get(string)"/> 
+        /// <see cref="ICacheManager.Get(string)"/>
         /// </summary>
         /// <typeparam name="T"><see cref="ICacheManager.Get(string)"/></typeparam>
         /// <param name="key"><see cref="ICacheManager.Get(string)"/></param>
+        /// <returns>The <see cref="T"/></returns>
         T ICacheManager.Get<T>(string key)
         {
             ObjectCache cacheInstance = MemoryCache.Default;
@@ -43,7 +43,7 @@ namespace WebTimeSheetManagement.Helpers
         }
 
         /// <summary>
-        /// <see cref="ICacheManager.Clear(string)"/> 
+        /// <see cref="ICacheManager.Clear(string)"/>
         /// </summary>
         /// <param name="key"><see cref="ICacheManager.Clear(string)"/></param>
         void ICacheManager.Clear(string key)

@@ -1,28 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+
+    /// <summary>
+    /// Defines the <see cref="TeamController" />
+    /// </summary>
     [ValidateAdminSession]
     public class TeamController : Controller
     {
-        private IUsers _IUsers;
+        /// <summary>
+        /// Defines the _IUsers
+        /// </summary>
+        private readonly IUsers _IUsers;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TeamController"/> class.
+        /// </summary>
         public TeamController()
         {
             _IUsers = new UsersConcrete();
         }
+
         // GET: Team
+        /// <summary>
+        /// The Members
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Members()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadUsersData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadUsersData()
         {
             try
@@ -50,6 +67,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The UserDetails
+        /// </summary>
+        /// <param name="RegistrationID">The RegistrationID<see cref="int?"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult UserDetails(int? RegistrationID)
         {
             try

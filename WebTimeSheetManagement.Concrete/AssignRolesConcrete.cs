@@ -1,22 +1,26 @@
-﻿using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-using System.Linq.Dynamic;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using Dapper;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Linq.Dynamic;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="AssignRolesConcrete" />
+    /// </summary>
     public class AssignRolesConcrete : IAssignRoles
     {
+        /// <summary>
+        /// The ListofAdmins
+        /// </summary>
+        /// <returns>The <see cref="List{AdminModel}"/></returns>
         public List<AdminModel> ListofAdmins()
         {
-
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
             {
                 con.Open();
@@ -33,9 +37,12 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ListofUser
+        /// </summary>
+        /// <returns>The <see cref="List{UserModel}"/></returns>
         public List<UserModel> ListofUser()
         {
-
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
             {
                 con.Open();
@@ -51,6 +58,12 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The UpdateAssigntoAdmin
+        /// </summary>
+        /// <param name="AssignToAdminID">The AssignToAdminID<see cref="string"/></param>
+        /// <param name="UserID">The UserID<see cref="string"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int UpdateAssigntoAdmin(string AssignToAdminID, string UserID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -71,6 +84,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowallRoles
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <returns>The <see cref="IQueryable{UserModel}"/></returns>
         public IQueryable<UserModel> ShowallRoles(string sortColumn, string sortColumnDir, string Search)
         {
             var _context = new DatabaseContext();
@@ -96,9 +116,13 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The RemovefromUserRole
+        /// </summary>
+        /// <param name="RegistrationID">The RegistrationID<see cref="string"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool RemovefromUserRole(string RegistrationID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -125,9 +149,12 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetListofUnAssignedUsers
+        /// </summary>
+        /// <returns>The <see cref="List{UserModel}"/></returns>
         public List<UserModel> GetListofUnAssignedUsers()
         {
-
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
             {
                 con.Open();
@@ -142,6 +169,12 @@ namespace WebTimeSheetManagement.Concrete
                 }
             }
         }
+
+        /// <summary>
+        /// The SaveAssignedRoles
+        /// </summary>
+        /// <param name="AssignRolesModel">The AssignRolesModel<see cref="AssignRolesModel"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool SaveAssignedRoles(AssignRolesModel AssignRolesModel)
         {
             bool result = false;
@@ -179,17 +212,22 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The CheckIsUserAssignedRole
+        /// </summary>
+        /// <param name="RegistrationID">The RegistrationID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool CheckIsUserAssignedRole(int RegistrationID)
         {
             var IsassignCount = 0;
             using (var _context = new DatabaseContext())
             {
                 IsassignCount = (from assignUser in _context.AssignedRoles
-                 where assignUser.RegistrationID == RegistrationID
-                 select assignUser).Count();
+                                 where assignUser.RegistrationID == RegistrationID
+                                 select assignUser).Count();
             }
 
-            if (IsassignCount>0)
+            if (IsassignCount > 0)
             {
                 return true;
             }

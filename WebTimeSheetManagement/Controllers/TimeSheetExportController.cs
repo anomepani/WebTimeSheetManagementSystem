@@ -1,29 +1,47 @@
-﻿using System;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Helpers;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Data;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
+    using System.Web.UI;
+    using System.Web.UI.WebControls;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Helpers;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="TimeSheetExportController" />
+    /// </summary>
     [ValidateAdminSession]
     public class TimeSheetExportController : Controller
     {
-        ITimeSheetExport _ITimeSheetExport;
-        ITimeSheet _ITimeSheet;
+        /// <summary>
+        /// Defines the _ITimeSheetExport
+        /// </summary>
+        private readonly ITimeSheetExport _ITimeSheetExport;
+
+        /// <summary>
+        /// Defines the _ITimeSheet
+        /// </summary>
+        private readonly ITimeSheet _ITimeSheet;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSheetExportController"/> class.
+        /// </summary>
         public TimeSheetExportController()
         {
             _ITimeSheetExport = new TimeSheetExportConcrete();
             _ITimeSheet = new TimeSheetConcrete();
         }
 
+        /// <summary>
+        /// The Report
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult Report()
         {
@@ -31,6 +49,11 @@ namespace WebTimeSheetManagement.Controllers
         }
 
         // GET: TimeSheetExport
+        /// <summary>
+        /// The ExportToExcel
+        /// </summary>
+        /// <param name="objtimesheet">The objtimesheet<see cref="TimeSheetExcelExportModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult ExportToExcel(TimeSheetExcelExportModel objtimesheet)
         {
@@ -104,8 +127,10 @@ namespace WebTimeSheetManagement.Controllers
                             }
 
                             ds.Tables.Add(dt);
-                            var gv = new GridView();
-                            gv.DataSource = ds;
+                            var gv = new GridView
+                            {
+                                DataSource = ds
+                            };
                             gv.DataBind();
                             Response.ClearContent();
                             Response.Buffer = true;
@@ -120,7 +145,6 @@ namespace WebTimeSheetManagement.Controllers
                             Response.End();
                             return View("Report");
                         }
-
                     }
                 }
 
@@ -137,12 +161,21 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The TimeSheetReport
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult TimeSheetReport()
         {
             return View(new TimeSheetExportUserModel());
         }
 
+        /// <summary>
+        /// The TimeSheetReport
+        /// </summary>
+        /// <param name="objtimesheet">The objtimesheet<see cref="TimeSheetExportUserModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult TimeSheetReport(TimeSheetExportUserModel objtimesheet)
         {
@@ -150,7 +183,6 @@ namespace WebTimeSheetManagement.Controllers
             DataTable dt = new DataTable();
             try
             {
-
                 dt.Columns.Add("ProjectName", typeof(string));
                 dt.Columns.Add("Sunday", typeof(string));
                 dt.Columns.Add("Monday", typeof(string));
@@ -176,7 +208,6 @@ namespace WebTimeSheetManagement.Controllers
                         }
                         else
                         {
-
 
                             for (int k = 0; k < timesheetdata.Tables[0].Rows.Count; k++)
                             {
@@ -237,12 +268,14 @@ namespace WebTimeSheetManagement.Controllers
                                 }
                             }
                             ds.Tables.Add(dt);
-                            var gv = new GridView();
-                            gv.DataSource = ds;
+                            var gv = new GridView
+                            {
+                                DataSource = ds
+                            };
                             gv.DataBind();
                             Response.ClearContent();
                             Response.Buffer = true;
-                            Response.AddHeader("content-disposition", "attachment; filename=" + filename.Trim() + ".xls" + "");
+                            Response.AddHeader("content-disposition", "attachment; filename=" + filename.Trim() + ".xls");
                             Response.ContentType = "application/ms-excel";
                             Response.Charset = "";
                             StringWriter objStringWriter = new StringWriter();
@@ -266,6 +299,10 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The ListofEmployees
+        /// </summary>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult ListofEmployees()
         {
             try
@@ -278,7 +315,5 @@ namespace WebTimeSheetManagement.Controllers
                 throw;
             }
         }
-
-
     }
 }

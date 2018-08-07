@@ -1,19 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTimeSheetManagement.Models;
-using System.Linq.Dynamic;
-using WebTimeSheetManagement.Interface;
-using System.Data.SqlClient;
-using System.Configuration;
-using Dapper;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using Dapper;
+    using System;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Linq.Dynamic;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="UsersConcrete" />
+    /// </summary>
     public class UsersConcrete : IUsers
     {
+        /// <summary>
+        /// The ShowallUsers
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <returns>The <see cref="IQueryable{RegistrationViewSummaryModel}"/></returns>
         public IQueryable<RegistrationViewSummaryModel> ShowallUsers(string sortColumn, string sortColumnDir, string Search)
         {
             var _context = new DatabaseContext();
@@ -42,9 +49,13 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The GetUserDetailsByRegistrationID
+        /// </summary>
+        /// <param name="RegistrationID">The RegistrationID<see cref="int?"/></param>
+        /// <returns>The <see cref="RegistrationViewDetailsModel"/></returns>
         public RegistrationViewDetailsModel GetUserDetailsByRegistrationID(int? RegistrationID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -63,6 +74,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowallAdmin
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <returns>The <see cref="IQueryable{RegistrationViewSummaryModel}"/></returns>
         public IQueryable<RegistrationViewSummaryModel> ShowallAdmin(string sortColumn, string sortColumnDir, string Search)
         {
             var _context = new DatabaseContext();
@@ -88,9 +106,13 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The GetAdminDetailsByRegistrationID
+        /// </summary>
+        /// <param name="RegistrationID">The RegistrationID<see cref="int?"/></param>
+        /// <returns>The <see cref="RegistrationViewDetailsModel"/></returns>
         public RegistrationViewDetailsModel GetAdminDetailsByRegistrationID(int? RegistrationID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -109,6 +131,14 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowallUsersUnderAdmin
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <param name="RegistrationID">The RegistrationID<see cref="int?"/></param>
+        /// <returns>The <see cref="IQueryable{RegistrationViewSummaryModel}"/></returns>
         public IQueryable<RegistrationViewSummaryModel> ShowallUsersUnderAdmin(string sortColumn, string sortColumnDir, string Search, int? RegistrationID)
         {
             var _context = new DatabaseContext();
@@ -135,9 +165,12 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryabletimesheet;
-
         }
 
+        /// <summary>
+        /// The GetTotalAdminsCount
+        /// </summary>
+        /// <returns>The <see cref="int"/></returns>
         public int GetTotalAdminsCount()
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -154,6 +187,10 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetTotalUsersCount
+        /// </summary>
+        /// <returns>The <see cref="int"/></returns>
         public int GetTotalUsersCount()
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -170,6 +207,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetUserIDbyTimesheetID
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int GetUserIDbyTimesheetID(int TimeSheetMasterID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -188,6 +230,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetUserIDbyExpenseID
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int GetUserIDbyExpenseID(int ExpenseID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))
@@ -206,6 +253,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetAdminIDbyUserID
+        /// </summary>
+        /// <param name="UserID">The UserID<see cref="int"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int GetAdminIDbyUserID(int UserID)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))

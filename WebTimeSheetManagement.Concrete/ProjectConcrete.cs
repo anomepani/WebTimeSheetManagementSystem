@@ -1,19 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-using System.Linq.Dynamic;
-using System.Data.SqlClient;
-using System.Configuration;
-using Dapper;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using Dapper;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Linq.Dynamic;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="ProjectConcrete" />
+    /// </summary>
     public class ProjectConcrete : IProject
     {
+        /// <summary>
+        /// The CheckProjectCodeExists
+        /// </summary>
+        /// <param name="ProjectCode">The ProjectCode<see cref="string"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool CheckProjectCodeExists(string ProjectCode)
         {
             try
@@ -40,6 +46,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The CheckProjectNameExists
+        /// </summary>
+        /// <param name="ProjectName">The ProjectName<see cref="string"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool CheckProjectNameExists(string ProjectName)
         {
             try
@@ -66,6 +77,10 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetListofProjects
+        /// </summary>
+        /// <returns>The <see cref="List{ProjectMaster}"/></returns>
         public List<ProjectMaster> GetListofProjects()
         {
             try
@@ -83,6 +98,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The SaveProject
+        /// </summary>
+        /// <param name="ProjectMaster">The ProjectMaster<see cref="ProjectMaster"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int SaveProject(ProjectMaster ProjectMaster)
         {
             try
@@ -99,6 +119,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowProjects
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <returns>The <see cref="IQueryable{ProjectMaster}"/></returns>
         public IQueryable<ProjectMaster> ShowProjects(string sortColumn, string sortColumnDir, string Search)
         {
             var _context = new DatabaseContext();
@@ -116,9 +143,13 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryableproject;
-
         }
 
+        /// <summary>
+        /// The CheckProjectIDExistsInTimesheet
+        /// </summary>
+        /// <param name="ProjectID">The ProjectID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool CheckProjectIDExistsInTimesheet(int ProjectID)
         {
             try
@@ -145,6 +176,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The CheckProjectIDExistsInExpense
+        /// </summary>
+        /// <param name="ProjectID">The ProjectID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool CheckProjectIDExistsInExpense(int ProjectID)
         {
             try
@@ -171,6 +207,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ProjectDelete
+        /// </summary>
+        /// <param name="ProjectID">The ProjectID<see cref="int"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int ProjectDelete(int ProjectID)
         {
             try
@@ -179,7 +220,7 @@ namespace WebTimeSheetManagement.Concrete
                 {
                     var project = (from expense in _context.ProjectMaster
                                    where expense.ProjectID == ProjectID
-                                   select expense).SingleOrDefault(); ;
+                                   select expense).SingleOrDefault();
 
                     if (project != null)
                     {
@@ -199,6 +240,10 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetTotalProjectsCounts
+        /// </summary>
+        /// <returns>The <see cref="int"/></returns>
         public int GetTotalProjectsCounts()
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString()))

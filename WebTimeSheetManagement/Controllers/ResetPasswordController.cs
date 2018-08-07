@@ -1,30 +1,46 @@
-﻿using EventApplicationCore.Library;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using EventApplicationCore.Library;
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+
+    /// <summary>
+    /// Defines the <see cref="ResetPasswordController" />
+    /// </summary>
     [ValidateSuperAdminSession]
     public class ResetPasswordController : Controller
     {
-        IRegistration _IRegistration;
+        /// <summary>
+        /// Defines the _IRegistration
+        /// </summary>
+        private readonly IRegistration _IRegistration;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResetPasswordController"/> class.
+        /// </summary>
         public ResetPasswordController()
         {
             _IRegistration = new RegistrationConcrete();
         }
 
         // GET: ResetPassword
+        /// <summary>
+        /// The Index
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadRegisteredUserData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadRegisteredUserData()
         {
             try
@@ -50,9 +66,13 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The ResetUserPasswordProcess
+        /// </summary>
+        /// <param name="RegistrationID">The RegistrationID<see cref="string"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult ResetUserPasswordProcess(string RegistrationID)
         {
             try
@@ -79,7 +99,5 @@ namespace WebTimeSheetManagement.Controllers
                 throw;
             }
         }
-
-
     }
 }

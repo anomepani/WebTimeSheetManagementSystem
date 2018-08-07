@@ -1,18 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-using WebTimeSheetManagement.Filters;
-
-namespace WebTimeSheetManagement
+﻿namespace WebTimeSheetManagement
 {
+    using System;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Optimization;
+    using System.Web.Routing;
+    using WebTimeSheetManagement.Filters;
+
+    /// <summary>
+    /// Defines the <see cref="MvcApplication" />
+    /// </summary>
     public class MvcApplication : System.Web.HttpApplication
     {
+        /// <summary>
+        /// The Application_BeginRequest
+        /// </summary>
         protected void Application_BeginRequest()
         {
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
@@ -20,6 +24,9 @@ namespace WebTimeSheetManagement
             Response.Cache.SetNoStore();
         }
 
+        /// <summary>
+        /// The Application_Start
+        /// </summary>
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -30,10 +37,13 @@ namespace WebTimeSheetManagement
             SqlDependency.Start(ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString());
         }
 
-
-        void Application_Error(object sender, EventArgs e)
+        /// <summary>
+        /// The Application_Error
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="EventArgs"/></param>
+        private void Application_Error(object sender, EventArgs e)
         {
-
             Exception ex = Server.GetLastError();
             if (ex == null || ex.Message.StartsWith("File"))
             {
@@ -49,13 +59,11 @@ namespace WebTimeSheetManagement
                 //need to create separate page for Well known error. e.g. 404 Error
                 Response.Redirect("~/Error/Error");
 
-
             }
             finally
             {
                 ex = null;
             }
-
         }
     }
 }

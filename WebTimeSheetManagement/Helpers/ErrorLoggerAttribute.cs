@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace WebTimeSheetManagement.Helpers
+﻿namespace WebTimeSheetManagement.Helpers
 {
+    using System;
+    using System.Configuration;
+    using System.Globalization;
+    using System.IO;
+    using System.Web.Mvc;
+
+    /// <summary>
+    /// Defines the <see cref="ErrorLoggerAttribute" />
+    /// </summary>
     public class ErrorLoggerAttribute : HandleErrorAttribute
     {
+        /// <summary>
+        /// The OnException
+        /// </summary>
+        /// <param name="filterContext">The filterContext<see cref="ExceptionContext"/></param>
         public override void OnException(ExceptionContext filterContext)
         {
-
             string strLogText = "";
             Exception ex = filterContext.Exception;
             filterContext.ExceptionHandled = true;
@@ -22,15 +25,15 @@ namespace WebTimeSheetManagement.Helpers
 
             if (ex.Source == ".Net SqlClient Data Provider")
             {
-                strLogText += Environment.NewLine + "SqlClient Error ---\n{0}" + "Check Sql Error";
+                strLogText += Environment.NewLine + "SqlClient Error ---\n{0}Check Sql Error";
             }
             else if (ex.Source == "System.Web.Mvc")
             {
-                strLogText += Environment.NewLine + ".Net Error ---\n{0}" + "Check MVC Code For Error";
+                strLogText += Environment.NewLine + ".Net Error ---\n{0}Check MVC Code For Error";
             }
-            else if (filterContext.HttpContext.Request.IsAjaxRequest() == true)
+            else if (filterContext.HttpContext.Request.IsAjaxRequest())
             {
-                strLogText += Environment.NewLine + ".Net Error ---\n{0}" + "Check MVC Ajax Code For Error";
+                strLogText += Environment.NewLine + ".Net Error ---\n{0}Check MVC Ajax Code For Error";
             }
 
             strLogText += Environment.NewLine + "Source ---\n{0}" + ex.Source;
@@ -49,7 +52,7 @@ namespace WebTimeSheetManagement.Helpers
 
             string timestamp = DateTime.Now.ToString("d-MMMM-yyyy", new CultureInfo("en-GB"));
 
-            string error_folder = ConfigurationManager.AppSettings["ErrorLogPath"].ToString();
+            string error_folder = ConfigurationManager.AppSettings["ErrorLogPath"];
 
             if (!System.IO.Directory.Exists(error_folder))
             {
@@ -85,8 +88,6 @@ namespace WebTimeSheetManagement.Helpers
             {
                 ViewName = "Error"
             };
-
-
         }
     }
 }

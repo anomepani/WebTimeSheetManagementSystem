@@ -1,31 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Filters
+﻿namespace WebTimeSheetManagement.Filters
 {
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="UserAuditFilter" />
+    /// </summary>
     public class UserAuditFilter : ActionFilterAttribute
     {
-        IAudit _IAudit;
+        /// <summary>
+        /// Defines the _IAudit
+        /// </summary>
+        private readonly IAudit _IAudit;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserAuditFilter"/> class.
+        /// </summary>
         public UserAuditFilter()
         {
             _IAudit = new AuditConcrete();
         }
 
+        /// <summary>
+        /// The OnActionExecuting
+        /// </summary>
+        /// <param name="filterContext">The filterContext<see cref="ActionExecutingContext"/></param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-
             AuditTB objaudit = new AuditTB(); // Getting Action Name 
 
             string actionName = filterContext.ActionDescriptor.ActionName; //Getting Controller Name 
             string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             var request = filterContext.HttpContext.Request;
-
 
             if (HttpContext.Current.Session["UserID"] != null)
             {
@@ -39,7 +49,6 @@ namespace WebTimeSheetManagement.Filters
             {
                 objaudit.UserID = "";
             }
-
 
             objaudit.SessionID = HttpContext.Current.Session.SessionID; // Application SessionID // User IPAddress 
             objaudit.IPAddress = request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? request.UserHostAddress;
@@ -68,7 +77,6 @@ namespace WebTimeSheetManagement.Filters
             }
 
             _IAudit.InsertAuditData(objaudit);
-
         }
     }
 }

@@ -1,31 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+
+    /// <summary>
+    /// Defines the <see cref="AllExpenseController" />
+    /// </summary>
     [ValidateUserSession]
     public class AllExpenseController : Controller
     {
+        /// <summary>
+        /// Defines the _IExpense
+        /// </summary>
+        private readonly IExpense _IExpense;
 
-        IExpense _IExpense;
-        IDocument _IDocument;
+        /// <summary>
+        /// Defines the _IDocument
+        /// </summary>
+        private readonly IDocument _IDocument;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AllExpenseController"/> class.
+        /// </summary>
         public AllExpenseController()
         {
             _IExpense = new ExpenseConcrete();
             _IDocument = new DocumentConcrete();
         }
+
         // GET: AllExpense
+        /// <summary>
+        /// The Expense
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Expense()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadExpenseData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadExpenseData()
         {
             try
@@ -51,9 +71,13 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The Delete
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult Delete(int ExpenseID)
         {
             try
@@ -65,7 +89,7 @@ namespace WebTimeSheetManagement.Controllers
 
                 var dataSubmitted = _IExpense.IsExpenseSubmitted(ExpenseID, Convert.ToInt32(Session["UserID"]));
 
-                if (dataSubmitted == true)
+                if (dataSubmitted)
                 {
                     var data = _IExpense.DeleteExpensetByExpenseID(ExpenseID, Convert.ToInt32(Session["UserID"]));
 
@@ -89,6 +113,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Details
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Details(int ExpenseID)
         {
             try
@@ -103,6 +132,12 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Download
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="string"/></param>
+        /// <param name="DocumentID">The DocumentID<see cref="int"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Download(string ExpenseID, int DocumentID)
         {
             try
@@ -123,21 +158,37 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The SubmittedExpense
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult SubmittedExpense()
         {
             return View();
         }
 
+        /// <summary>
+        /// The ApprovedExpense
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult ApprovedExpense()
         {
             return View();
         }
 
+        /// <summary>
+        /// The RejectedExpense
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult RejectedExpense()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadSubmittedExpenseData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadSubmittedExpenseData()
         {
             try
@@ -153,7 +204,7 @@ namespace WebTimeSheetManagement.Controllers
 
                 int recordsTotal = 0;
 
-                var v = _IExpense.ShowExpenseStatus(sortColumn, sortColumnDir, searchValue, Convert.ToInt32(Session["UserID"]),1);
+                var v = _IExpense.ShowExpenseStatus(sortColumn, sortColumnDir, searchValue, Convert.ToInt32(Session["UserID"]), 1);
                 recordsTotal = v.Count();
                 var data = v.Skip(skip).Take(pageSize).ToList();
 
@@ -163,8 +214,12 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
+
+        /// <summary>
+        /// The LoadApprovedExpenseData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadApprovedExpenseData()
         {
             try
@@ -190,8 +245,12 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
+
+        /// <summary>
+        /// The LoadRejectedExpenseData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadRejectedExpenseData()
         {
             try
@@ -217,8 +276,6 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
-
     }
 }

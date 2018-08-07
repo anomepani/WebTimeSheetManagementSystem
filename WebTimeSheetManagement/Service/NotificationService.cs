@@ -1,23 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.Script.Serialization;
-using WebTimeSheetManagement.Hubs;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Service
+﻿namespace WebTimeSheetManagement.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Web.Script.Serialization;
+    using WebTimeSheetManagement.Hubs;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="NotificationService" />
+    /// </summary>
     public class NotificationService
     {
+        /// <summary>
+        /// Defines the connString
+        /// </summary>
+        private static readonly string connString = ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString();
 
-        static readonly string connString = ConfigurationManager.ConnectionStrings["TimesheetDBEntities"].ToString();
+        /// <summary>
+        /// Defines the command
+        /// </summary>
         internal static SqlCommand command = null;
-        internal static SqlDependency dependency = null;
 
+        /// <summary>
+        /// Defines the dependency
+        /// </summary>
+        internal static SqlDependency dependency = null;
 
         /// <summary>
         /// Gets the notifications.
@@ -30,7 +40,7 @@ namespace WebTimeSheetManagement.Service
                 var messages = new List<NotificationsTB>();
                 using (var connection = new SqlConnection(connString))
                 {
-                    connection.Open();         
+                    connection.Open();
                     using (command = new SqlCommand(@"  
     SELECT [NotificationsID],[Status],[Message]FROM [TimesheetDB].[dbo].[NotificationsTB]
   where [TimesheetDB].[dbo].[NotificationsTB].Status ='A' 
@@ -60,16 +70,18 @@ namespace WebTimeSheetManagement.Service
                 var jsonSerialiser = new JavaScriptSerializer();
                 var json = jsonSerialiser.Serialize(messages);
                 return json;
-
             }
             catch (Exception)
             {
                 return null;
             }
-
-
         }
 
+        /// <summary>
+        /// The dependency_OnChange
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="SqlNotificationEventArgs"/></param>
         private static void dependency_OnChange(object sender, SqlNotificationEventArgs e)
         {
             if (dependency != null)

@@ -1,19 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-using System.Linq.Dynamic;
-using System.Data.SqlClient;
-using Dapper;
-using System.Configuration;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using Dapper;
+    using System;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Linq.Dynamic;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="RegistrationConcrete" />
+    /// </summary>
     public class RegistrationConcrete : IRegistration
     {
+        /// <summary>
+        /// The CheckUserNameExists
+        /// </summary>
+        /// <param name="Username">The Username<see cref="string"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool CheckUserNameExists(string Username)
         {
             try
@@ -40,6 +45,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The AddUser
+        /// </summary>
+        /// <param name="entity">The entity<see cref="Registration"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int AddUser(Registration entity)
         {
             try
@@ -56,6 +66,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ListofRegisteredUser
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <returns>The <see cref="IQueryable{Registration}"/></returns>
         public IQueryable<Registration> ListofRegisteredUser(string sortColumn, string sortColumnDir, string Search)
         {
             try
@@ -76,7 +93,6 @@ namespace WebTimeSheetManagement.Concrete
                 }
 
                 return IQueryableRegistered;
-
             }
             catch (Exception)
             {
@@ -84,7 +100,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
-        public bool UpdatePassword(string RegistrationID,string Password)
+        /// <summary>
+        /// The UpdatePassword
+        /// </summary>
+        /// <param name="RegistrationID">The RegistrationID<see cref="string"/></param>
+        /// <param name="Password">The Password<see cref="string"/></param>
+        /// <returns>The <see cref="bool"/></returns>
+        public bool UpdatePassword(string RegistrationID, string Password)
         {
             try
             {
@@ -96,7 +118,7 @@ namespace WebTimeSheetManagement.Concrete
                     var result = con.Execute("Usp_UpdatePasswordbyRegistrationID", param, null, 0, System.Data.CommandType.StoredProcedure);
                     if (result > 0)
                     {
-                        return true; 
+                        return true;
                     }
                     else
                     {
@@ -109,6 +131,5 @@ namespace WebTimeSheetManagement.Concrete
                 throw;
             }
         }
-
     }
 }

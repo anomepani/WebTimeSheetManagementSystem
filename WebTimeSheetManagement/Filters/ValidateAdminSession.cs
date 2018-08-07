@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace WebTimeSheetManagement.Filters
+﻿namespace WebTimeSheetManagement.Filters
 {
+    using System;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
+    /// <summary>
+    /// Defines the <see cref="ValidateAdminSession" />
+    /// </summary>
     public class ValidateAdminSession : ActionFilterAttribute
     {
+        /// <summary>
+        /// The OnActionExecuting
+        /// </summary>
+        /// <param name="filterContext">The filterContext<see cref="ActionExecutingContext"/></param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             try

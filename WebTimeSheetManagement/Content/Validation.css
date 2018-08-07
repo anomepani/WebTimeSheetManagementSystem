@@ -16,7 +16,10 @@
 .validation-summary-valid {
     display: none;
 }*/
-.manadatory:before {content: '*';color: Red;}
+.manadatory:before {
+    content: '*';
+    color: Red;
+}
 
 .input-validation-error {
     border: 1px solid #f00;

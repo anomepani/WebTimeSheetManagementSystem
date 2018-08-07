@@ -1,21 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="TimeSheetController" />
+    /// </summary>
     [ValidateUserSession]
     public class TimeSheetController : Controller
     {
-        IProject _IProject;
-        ITimeSheet _ITimeSheet;
-        IUsers _IUsers;
+        /// <summary>
+        /// Defines the _IProject
+        /// </summary>
+        private readonly IProject _IProject;
+
+        /// <summary>
+        /// Defines the _ITimeSheet
+        /// </summary>
+        private readonly ITimeSheet _ITimeSheet;
+
+        /// <summary>
+        /// Defines the _IUsers
+        /// </summary>
+        private readonly IUsers _IUsers;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSheetController"/> class.
+        /// </summary>
         public TimeSheetController()
         {
             _IProject = new ProjectConcrete();
@@ -24,11 +39,20 @@ namespace WebTimeSheetManagement.Controllers
         }
 
         // GET: TimeSheet
+        /// <summary>
+        /// The Add
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Add()
         {
             return View();
         }
 
+        /// <summary>
+        /// The Add
+        /// </summary>
+        /// <param name="timesheetmodel">The timesheetmodel<see cref="TimeSheetModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(TimeSheetModel timesheetmodel)
@@ -41,14 +65,16 @@ namespace WebTimeSheetManagement.Controllers
                     return View();
                 }
 
-                TimeSheetMaster objtimesheetmaster = new TimeSheetMaster();
-                objtimesheetmaster.TimeSheetMasterID = 0;
-                objtimesheetmaster.UserID = Convert.ToInt32(Session["UserID"]);
-                objtimesheetmaster.CreatedOn = DateTime.Now;
-                objtimesheetmaster.FromDate = timesheetmodel.hdtext1;
-                objtimesheetmaster.ToDate = timesheetmodel.hdtext7;
-                objtimesheetmaster.TotalHours = CalculateTotalHours(timesheetmodel);
-                objtimesheetmaster.TimeSheetStatus = 1;
+                TimeSheetMaster objtimesheetmaster = new TimeSheetMaster
+                {
+                    TimeSheetMasterID = 0,
+                    UserID = Convert.ToInt32(Session["UserID"]),
+                    CreatedOn = DateTime.Now,
+                    FromDate = timesheetmodel.hdtext1,
+                    ToDate = timesheetmodel.hdtext7,
+                    TotalHours = CalculateTotalHours(timesheetmodel),
+                    TimeSheetStatus = 1
+                };
                 int TimeSheetMasterID = _ITimeSheet.AddTimeSheetMaster(objtimesheetmaster);
 
                 var count = ProjectSelectCount(timesheetmodel);
@@ -70,6 +96,10 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The ListofProjects
+        /// </summary>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult ListofProjects()
         {
             try
@@ -83,18 +113,23 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The CalculateTotalHours
+        /// </summary>
+        /// <param name="TimeSheetModel">The TimeSheetModel<see cref="TimeSheetModel"/></param>
+        /// <returns>The <see cref="int?"/></returns>
         [NonAction]
         private int? CalculateTotalHours(TimeSheetModel TimeSheetModel)
         {
             try
             {
                 int? Total = 0;
-                var val1 = TimeSheetModel.texttotal_p1 == null ? 0 : TimeSheetModel.texttotal_p1;
-                var val2 = TimeSheetModel.texttotal_p2 == null ? 0 : TimeSheetModel.texttotal_p2;
-                var val3 = TimeSheetModel.texttotal_p3 == null ? 0 : TimeSheetModel.texttotal_p3;
-                var val4 = TimeSheetModel.texttotal_p4 == null ? 0 : TimeSheetModel.texttotal_p4;
-                var val5 = TimeSheetModel.texttotal_p5 == null ? 0 : TimeSheetModel.texttotal_p5;
-                var val6 = TimeSheetModel.texttotal_p6 == null ? 0 : TimeSheetModel.texttotal_p6;
+                var val1 = TimeSheetModel.texttotal_p1 ?? 0;
+                var val2 = TimeSheetModel.texttotal_p2 ?? 0;
+                var val3 = TimeSheetModel.texttotal_p3 ?? 0;
+                var val4 = TimeSheetModel.texttotal_p4 ?? 0;
+                var val5 = TimeSheetModel.texttotal_p5 ?? 0;
+                var val6 = TimeSheetModel.texttotal_p6 ?? 0;
                 Total = val1 + val2 + val3 + val4 + val5 + val6;
                 return Total;
             }
@@ -104,20 +139,30 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The SaveTimeSheetDetail
+        /// </summary>
+        /// <param name="DaysofWeek">The DaysofWeek<see cref="string"/></param>
+        /// <param name="Hours">The Hours<see cref="int?"/></param>
+        /// <param name="Period">The Period<see cref="DateTime?"/></param>
+        /// <param name="ProjectID">The ProjectID<see cref="int?"/></param>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
         [NonAction]
         private void SaveTimeSheetDetail(string DaysofWeek, int? Hours, DateTime? Period, int? ProjectID, int TimeSheetMasterID)
         {
             try
             {
-                TimeSheetDetails objtimesheetdetails = new TimeSheetDetails();
-                objtimesheetdetails.TimeSheetID = 0;
-                objtimesheetdetails.DaysofWeek = DaysofWeek;
-                objtimesheetdetails.Hours = Hours == null ? 0 : Hours;
-                objtimesheetdetails.Period = Period;
-                objtimesheetdetails.ProjectID = ProjectID;
-                objtimesheetdetails.UserID = Convert.ToInt32(Session["UserID"]);
-                objtimesheetdetails.CreatedOn = DateTime.Now;
-                objtimesheetdetails.TimeSheetMasterID = TimeSheetMasterID;
+                TimeSheetDetails objtimesheetdetails = new TimeSheetDetails
+                {
+                    TimeSheetID = 0,
+                    DaysofWeek = DaysofWeek,
+                    Hours = Hours ?? 0,
+                    Period = Period,
+                    ProjectID = ProjectID,
+                    UserID = Convert.ToInt32(Session["UserID"]),
+                    CreatedOn = DateTime.Now,
+                    TimeSheetMasterID = TimeSheetMasterID
+                };
                 int TimeSheetID = _ITimeSheet.AddTimeSheetDetail(objtimesheetdetails);
             }
             catch (Exception)
@@ -126,6 +171,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The CheckIsDateAlreadyUsed
+        /// </summary>
+        /// <param name="FromDate">The FromDate<see cref="DateTime"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult CheckIsDateAlreadyUsed(DateTime FromDate)
         {
             try
@@ -144,6 +194,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Delete
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult Delete(int TimeSheetMasterID)
         {
             try
@@ -170,6 +225,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The ProjectSelectCount
+        /// </summary>
+        /// <param name="timesheetmodel">The timesheetmodel<see cref="TimeSheetModel"/></param>
+        /// <returns>The <see cref="int"/></returns>
         private int ProjectSelectCount(TimeSheetModel timesheetmodel)
         {
             try
@@ -177,37 +237,37 @@ namespace WebTimeSheetManagement.Controllers
                 int count = 0;
                 if (timesheetmodel.ProjectID1 != null && (timesheetmodel.texttotal_p1 != null && timesheetmodel.texttotal_p1 != 0))
                 {
-                    count = count + 1;
+                    count++;
                 }
 
                 if (timesheetmodel.ProjectID2 != null && (timesheetmodel.texttotal_p2 != null && timesheetmodel.texttotal_p2 != 0))
                 {
-                    count = count + 1;
+                    count++;
                 }
 
                 if (timesheetmodel.ProjectID3 != null && (timesheetmodel.texttotal_p3 != null && timesheetmodel.texttotal_p3 != 0))
                 {
-                    count = count + 1;
+                    count++;
                 }
 
                 if (timesheetmodel.ProjectID3 != null && (timesheetmodel.texttotal_p3 != null && timesheetmodel.texttotal_p3 != 0))
                 {
-                    count = count + 1;
+                    count++;
                 }
 
                 if (timesheetmodel.ProjectID4 != null && (timesheetmodel.texttotal_p4 != null && timesheetmodel.texttotal_p4 != 0))
                 {
-                    count = count + 1;
+                    count++;
                 }
 
                 if (timesheetmodel.ProjectID5 != null && (timesheetmodel.texttotal_p5 != null && timesheetmodel.texttotal_p5 != 0))
                 {
-                    count = count + 1;
+                    count++;
                 }
 
                 if (timesheetmodel.ProjectID6 != null && (timesheetmodel.texttotal_p6 != null && timesheetmodel.texttotal_p6 != 0))
                 {
-                    count = count + 1;
+                    count++;
                 }
 
                 return count;
@@ -218,13 +278,17 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Save
+        /// </summary>
+        /// <param name="timesheetmodel">The timesheetmodel<see cref="TimeSheetModel"/></param>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
         public void Save(TimeSheetModel timesheetmodel, int TimeSheetMasterID)
         {
             try
             {
                 if (timesheetmodel.ProjectID1 != null && (timesheetmodel.texttotal_p1 != null && timesheetmodel.texttotal_p1 != 0))
                 {
-                    #region Project 1
                     var date1 = timesheetmodel.hdtext1;
                     var DaysofWeek1 = timesheetmodel.DaysofWeek1;
                     var value1 = timesheetmodel.text1_p1;
@@ -260,13 +324,10 @@ namespace WebTimeSheetManagement.Controllers
                     var value7 = timesheetmodel.text7_p1;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID1, TimeSheetMasterID);
 
-
-                    #endregion
                 }
 
                 if (timesheetmodel.ProjectID2 != null && (timesheetmodel.texttotal_p2 != null && timesheetmodel.texttotal_p2 != 0))
                 {
-                    #region Project 2
                     var date1 = timesheetmodel.hdtext1;
                     var DaysofWeek1 = timesheetmodel.DaysofWeek1;
                     var value1 = timesheetmodel.text1_p2;
@@ -302,13 +363,10 @@ namespace WebTimeSheetManagement.Controllers
                     var value7 = timesheetmodel.text7_p2;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID2, TimeSheetMasterID);
 
-
-                    #endregion
                 }
 
                 if (timesheetmodel.ProjectID3 != null && (timesheetmodel.texttotal_p3 != null && timesheetmodel.texttotal_p3 != 0))
                 {
-                    #region Project 3
                     var date1 = timesheetmodel.hdtext1;
                     var DaysofWeek1 = timesheetmodel.DaysofWeek1;
                     var value1 = timesheetmodel.text1_p3;
@@ -344,13 +402,10 @@ namespace WebTimeSheetManagement.Controllers
                     var value7 = timesheetmodel.text7_p3;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID3, TimeSheetMasterID);
 
-
-                    #endregion
                 }
 
                 if (timesheetmodel.ProjectID4 != null && (timesheetmodel.texttotal_p4 != null && timesheetmodel.texttotal_p4 != 0))
                 {
-                    #region Project 4
                     var date1 = timesheetmodel.hdtext1;
                     var DaysofWeek1 = timesheetmodel.DaysofWeek1;
                     var value1 = timesheetmodel.text1_p4;
@@ -386,13 +441,10 @@ namespace WebTimeSheetManagement.Controllers
                     var value7 = timesheetmodel.text7_p4;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID4, TimeSheetMasterID);
 
-
-                    #endregion
                 }
 
                 if (timesheetmodel.ProjectID5 != null && (timesheetmodel.texttotal_p5 != null && timesheetmodel.texttotal_p5 != 0))
                 {
-                    #region Project 5
                     var date1 = timesheetmodel.hdtext1;
                     var DaysofWeek1 = timesheetmodel.DaysofWeek1;
                     var value1 = timesheetmodel.text1_p5;
@@ -428,13 +480,10 @@ namespace WebTimeSheetManagement.Controllers
                     var value7 = timesheetmodel.text7_p5;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID5, TimeSheetMasterID);
 
-
-                    #endregion
                 }
 
                 if (timesheetmodel.ProjectID6 != null && (timesheetmodel.texttotal_p6 != null && timesheetmodel.texttotal_p6 != 0))
                 {
-                    #region Project 6
                     var date1 = timesheetmodel.hdtext1;
                     var DaysofWeek1 = timesheetmodel.DaysofWeek1;
                     var value1 = timesheetmodel.text1_p6;
@@ -470,22 +519,23 @@ namespace WebTimeSheetManagement.Controllers
                     var value7 = timesheetmodel.text7_p6;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID6, TimeSheetMasterID);
 
-
-                    #endregion
                 }
             }
             catch (Exception)
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The SaveDescription
+        /// </summary>
+        /// <param name="timesheetmodel">The timesheetmodel<see cref="TimeSheetModel"/></param>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
         public void SaveDescription(TimeSheetModel timesheetmodel, int TimeSheetMasterID)
         {
             try
             {
-
                 if (timesheetmodel.ProjectID1 != null)
                 {
                     InsertDescriptionDetail(timesheetmodel.ProjectID1, TimeSheetMasterID, timesheetmodel.Description_p1);
@@ -520,22 +570,29 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The InsertTimeSheetAudit
+        /// </summary>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <param name="Status">The Status<see cref="int"/></param>
+        /// <returns>The <see cref="TimeSheetAuditTB"/></returns>
         private TimeSheetAuditTB InsertTimeSheetAudit(int TimeSheetMasterID, int Status)
         {
             try
             {
-                TimeSheetAuditTB objAuditTB = new TimeSheetAuditTB();
-                objAuditTB.ApprovalTimeSheetLogID = 0;
-                objAuditTB.TimeSheetID = TimeSheetMasterID;
-                objAuditTB.Status = Status;
-                objAuditTB.CreatedOn = DateTime.Now;
-                objAuditTB.Comment = string.Empty;
-                objAuditTB.ApprovalUser = _IUsers.GetAdminIDbyUserID(Convert.ToInt32(Session["UserID"]));
-                objAuditTB.ProcessedDate = DateTime.Now;
-                objAuditTB.UserID = Convert.ToInt32(Session["UserID"]);
+                TimeSheetAuditTB objAuditTB = new TimeSheetAuditTB
+                {
+                    ApprovalTimeSheetLogID = 0,
+                    TimeSheetID = TimeSheetMasterID,
+                    Status = Status,
+                    CreatedOn = DateTime.Now,
+                    Comment = string.Empty,
+                    ApprovalUser = _IUsers.GetAdminIDbyUserID(Convert.ToInt32(Session["UserID"])),
+                    ProcessedDate = DateTime.Now,
+                    UserID = Convert.ToInt32(Session["UserID"])
+                };
                 return objAuditTB;
             }
             catch (Exception)
@@ -544,18 +601,26 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The InsertDescriptionDetail
+        /// </summary>
+        /// <param name="ProjectID">The ProjectID<see cref="int?"/></param>
+        /// <param name="TimeSheetMasterID">The TimeSheetMasterID<see cref="int"/></param>
+        /// <param name="Description">The Description<see cref="string"/></param>
         [NonAction]
         private void InsertDescriptionDetail(int? ProjectID, int TimeSheetMasterID, string Description)
         {
             try
             {
-                DescriptionTB objtimesheetdetails = new DescriptionTB();
-                objtimesheetdetails.DescriptionID = 0;
-                objtimesheetdetails.ProjectID = ProjectID;
-                objtimesheetdetails.UserID = Convert.ToInt32(Session["UserID"]);
-                objtimesheetdetails.CreatedOn = DateTime.Now;
-                objtimesheetdetails.TimeSheetMasterID = TimeSheetMasterID;
-                objtimesheetdetails.Description = Description;
+                DescriptionTB objtimesheetdetails = new DescriptionTB
+                {
+                    DescriptionID = 0,
+                    ProjectID = ProjectID,
+                    UserID = Convert.ToInt32(Session["UserID"]),
+                    CreatedOn = DateTime.Now,
+                    TimeSheetMasterID = TimeSheetMasterID,
+                    Description = Description
+                };
                 int? TimeSheetID = _ITimeSheet.InsertDescription(objtimesheetdetails);
             }
             catch (Exception)
@@ -563,6 +628,5 @@ namespace WebTimeSheetManagement.Controllers
                 throw;
             }
         }
-
     }
 }

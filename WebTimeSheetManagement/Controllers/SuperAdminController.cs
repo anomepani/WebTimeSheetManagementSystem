@@ -1,27 +1,54 @@
-﻿using EventApplicationCore.Library;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Helpers;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using EventApplicationCore.Library;
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Helpers;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="SuperAdminController" />
+    /// </summary>
     [ValidateSuperAdminSession]
     public class SuperAdminController : Controller
     {
-        private IRegistration _IRegistration;
-        private IRoles _IRoles;
-        private IAssignRoles _IAssignRoles;
-        private ICacheManager _ICacheManager;
-        private IUsers _IUsers;
-        private IProject _IProject;
-        
+        /// <summary>
+        /// Defines the _IRegistration
+        /// </summary>
+        private readonly IRegistration _IRegistration;
 
+        /// <summary>
+        /// Defines the _IRoles
+        /// </summary>
+        private readonly IRoles _IRoles;
+
+        /// <summary>
+        /// Defines the _IAssignRoles
+        /// </summary>
+        private readonly IAssignRoles _IAssignRoles;
+
+        /// <summary>
+        /// Defines the _ICacheManager
+        /// </summary>
+        private readonly ICacheManager _ICacheManager;
+
+        /// <summary>
+        /// Defines the _IUsers
+        /// </summary>
+        private readonly IUsers _IUsers;
+
+        /// <summary>
+        /// Defines the _IProject
+        /// </summary>
+        private readonly IProject _IProject;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SuperAdminController"/> class.
+        /// </summary>
         public SuperAdminController()
         {
             _IRegistration = new RegistrationConcrete();
@@ -33,11 +60,14 @@ namespace WebTimeSheetManagement.Controllers
         }
 
         // GET: SuperAdmin
+        /// <summary>
+        /// The Dashboard
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Dashboard()
         {
             try
             {
-
                 var adminCount = _ICacheManager.Get<object>("AdminCount");
 
                 if (adminCount == null)
@@ -81,21 +111,28 @@ namespace WebTimeSheetManagement.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The CreateAdmin
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult CreateAdmin()
         {
             return View(new Registration());
         }
 
+        /// <summary>
+        /// The CreateAdmin
+        /// </summary>
+        /// <param name="registration">The registration<see cref="Registration"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult CreateAdmin(Registration registration)
         {
-
             try
             {
                 var isUsernameExists = _IRegistration.CheckUserNameExists(registration.Username);
@@ -107,7 +144,7 @@ namespace WebTimeSheetManagement.Controllers
                 else
                 {
                     registration.CreatedOn = DateTime.Now;
-                    registration.RoleID = _IRoles.getRolesofUserbyRolename("Admin");
+                    registration.RoleID = _IRoles.GetRolesofUserbyRolename("Admin");
                     registration.Password = EncryptionLibrary.EncryptText(registration.Password);
                     registration.ConfirmPassword = EncryptionLibrary.EncryptText(registration.ConfirmPassword);
                     if (_IRegistration.AddUser(registration) > 0)
@@ -129,23 +166,33 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The AssignRoles
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult AssignRoles()
         {
             try
             {
-                AssignRolesModel assignRolesModel = new AssignRolesModel();
-                assignRolesModel.ListofAdmins = _IAssignRoles.ListofAdmins();
-                assignRolesModel.ListofUser = _IAssignRoles.GetListofUnAssignedUsers();
+                AssignRolesModel assignRolesModel = new AssignRolesModel
+                {
+                    ListofAdmins = _IAssignRoles.ListofAdmins(),
+                    ListofUser = _IAssignRoles.GetListofUnAssignedUsers()
+                };
                 return View(assignRolesModel);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// The AssignRoles
+        /// </summary>
+        /// <param name="objassign">The objassign<see cref="AssignRolesModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult AssignRoles(AssignRolesModel objassign)
         {
@@ -159,9 +206,8 @@ namespace WebTimeSheetManagement.Controllers
                     return View(objassign);
                 }
 
-
                 var SelectedCount = (from User in objassign.ListofUser
-                                     where User.selectedUsers == true
+                                     where User.selectedUsers
                                      select User).Count();
 
                 if (SelectedCount == 0)
@@ -179,9 +225,11 @@ namespace WebTimeSheetManagement.Controllers
                     TempData["MessageRoles"] = "Roles Assigned Successfully!";
                 }
 
-                objassign = new AssignRolesModel();
-                objassign.ListofAdmins = _IAssignRoles.ListofAdmins();
-                objassign.ListofUser = _IAssignRoles.GetListofUnAssignedUsers();
+                objassign = new AssignRolesModel
+                {
+                    ListofAdmins = _IAssignRoles.ListofAdmins(),
+                    ListofUser = _IAssignRoles.GetListofUnAssignedUsers()
+                };
 
                 return RedirectToAction("AssignRoles");
             }
@@ -190,6 +238,5 @@ namespace WebTimeSheetManagement.Controllers
                 throw;
             }
         }
-
     }
 }

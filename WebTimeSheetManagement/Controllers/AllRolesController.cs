@@ -1,29 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+
+    /// <summary>
+    /// Defines the <see cref="AllRolesController" />
+    /// </summary>
     [ValidateSuperAdminSession]
     public class AllRolesController : Controller
     {
-        IAssignRoles _IAssignRoles;
+        /// <summary>
+        /// Defines the _IAssignRoles
+        /// </summary>
+        private readonly IAssignRoles _IAssignRoles;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AllRolesController"/> class.
+        /// </summary>
         public AllRolesController()
         {
             _IAssignRoles = new AssignRolesConcrete();
         }
 
         // GET: AllRoles
+        /// <summary>
+        /// The Roles
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Roles()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadRolesData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadRolesData()
         {
             try
@@ -51,6 +67,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The RemovefromRole
+        /// </summary>
+        /// <param name="RegistrationID">The RegistrationID<see cref="string"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult RemovefromRole(string RegistrationID)
         {
             try
@@ -68,7 +89,5 @@ namespace WebTimeSheetManagement.Controllers
                 return Json(false);
             }
         }
-
-
     }
 }

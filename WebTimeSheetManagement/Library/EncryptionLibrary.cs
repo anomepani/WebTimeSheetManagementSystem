@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EventApplicationCore.Library
+﻿namespace EventApplicationCore.Library
 {
+    using System;
+    using System.IO;
+    using System.Security.Cryptography;
+    using System.Text;
+
+    /// <summary>
+    /// Defines the <see cref="EncryptionLibrary" />
+    /// </summary>
     public class EncryptionLibrary
     {
+        /// <summary>
+        /// The AES_Encrypt
+        /// </summary>
+        /// <param name="bytesToBeEncrypted">The bytesToBeEncrypted<see cref="byte[]"/></param>
+        /// <param name="passwordBytes">The passwordBytes<see cref="byte[]"/></param>
+        /// <returns>The <see cref="byte[]"/></returns>
         public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
         {
             byte[] encryptedBytes = null;
@@ -43,6 +49,12 @@ namespace EventApplicationCore.Library
             return encryptedBytes;
         }
 
+        /// <summary>
+        /// The AES_Decrypt
+        /// </summary>
+        /// <param name="bytesToBeDecrypted">The bytesToBeDecrypted<see cref="byte[]"/></param>
+        /// <param name="passwordBytes">The passwordBytes<see cref="byte[]"/></param>
+        /// <returns>The <see cref="byte[]"/></returns>
         public static byte[] AES_Decrypt(byte[] bytesToBeDecrypted, byte[] passwordBytes)
         {
             try
@@ -83,6 +95,12 @@ namespace EventApplicationCore.Library
             }
         }
 
+        /// <summary>
+        /// The EncryptText
+        /// </summary>
+        /// <param name="input">The input<see cref="string"/></param>
+        /// <param name="password">The password<see cref="string"/></param>
+        /// <returns>The <see cref="string"/></returns>
         public static string EncryptText(string input, string password = "E6t187^D43%F")
         {
             try
@@ -106,6 +124,12 @@ namespace EventApplicationCore.Library
             }
         }
 
+        /// <summary>
+        /// The DecryptText
+        /// </summary>
+        /// <param name="input">The input<see cref="string"/></param>
+        /// <param name="password">The password<see cref="string"/></param>
+        /// <returns>The <see cref="string"/></returns>
         public static string DecryptText(string input, string password = "E6t187^D43%F")
         {
             try
@@ -123,13 +147,20 @@ namespace EventApplicationCore.Library
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// Defines the <see cref="KeyGenerator" />
+        /// </summary>
         public static class KeyGenerator
         {
+            /// <summary>
+            /// The GetUniqueKey
+            /// </summary>
+            /// <param name="maxSize">The maxSize<see cref="int"/></param>
+            /// <returns>The <see cref="string"/></returns>
             public static string GetUniqueKey(int maxSize = 15)
             {
                 try

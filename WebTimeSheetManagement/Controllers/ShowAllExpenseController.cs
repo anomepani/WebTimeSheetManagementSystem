@@ -1,34 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="ShowAllExpenseController" />
+    /// </summary>
     [ValidateAdminSession]
     public class ShowAllExpenseController : Controller
     {
+        /// <summary>
+        /// Defines the _IExpense
+        /// </summary>
+        private readonly IExpense _IExpense;
 
-        IExpense _IExpense;
-        IDocument _IDocument;
-        IUsers _IUsers;
+        /// <summary>
+        /// Defines the _IDocument
+        /// </summary>
+        private readonly IDocument _IDocument;
+
+        /// <summary>
+        /// Defines the _IUsers
+        /// </summary>
+        private readonly IUsers _IUsers;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShowAllExpenseController"/> class.
+        /// </summary>
         public ShowAllExpenseController()
         {
             _IExpense = new ExpenseConcrete();
             _IDocument = new DocumentConcrete();
             _IUsers = new UsersConcrete();
         }
+
         // GET: ShowAllExpense
+        /// <summary>
+        /// The Expense
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Expense()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadExpenseData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadExpenseData()
         {
             try
@@ -54,9 +78,13 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The Details
+        /// </summary>
+        /// <param name="id">The id<see cref="string"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Details(string id)
         {
             try
@@ -75,11 +103,15 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Approval
+        /// </summary>
+        /// <param name="expenseapprovalmodel">The expenseapprovalmodel<see cref="ExpenseApprovalModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Approval(ExpenseApprovalModel expenseapprovalmodel)
         {
             try
             {
-
                 if (expenseapprovalmodel.Comment == null)
                 {
                     return Json(false);
@@ -101,7 +133,6 @@ namespace WebTimeSheetManagement.Controllers
                     _IExpense.InsertExpenseAuditLog(InsertExpenseAudit(expenseapprovalmodel, 2));
                 }
 
-
                 return Json(true);
             }
             catch (Exception)
@@ -110,6 +141,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Rejected
+        /// </summary>
+        /// <param name="expenseapprovalmodel">The expenseapprovalmodel<see cref="ExpenseApprovalModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Rejected(ExpenseApprovalModel expenseapprovalmodel)
         {
             try
@@ -125,7 +161,6 @@ namespace WebTimeSheetManagement.Controllers
                 }
 
                 _IExpense.UpdateExpenseStatus(expenseapprovalmodel, 3); // Reject
-
 
                 if (_IExpense.IsExpenseALreadyProcessed(expenseapprovalmodel.ExpenseID))
                 {
@@ -144,6 +179,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Delete
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult Delete(int ExpenseID)
         {
             try
@@ -155,7 +195,7 @@ namespace WebTimeSheetManagement.Controllers
 
                 var dataSubmitted = _IExpense.IsExpenseSubmitted(ExpenseID, Convert.ToInt32(Session["AdminUser"]));
 
-                if (dataSubmitted == true)
+                if (dataSubmitted)
                 {
                     var data = _IExpense.DeleteExpensetByExpenseID(ExpenseID, Convert.ToInt32(Session["UserID"]));
 
@@ -179,6 +219,12 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Download
+        /// </summary>
+        /// <param name="id">The id<see cref="string"/></param>
+        /// <param name="DocumentID">The DocumentID<see cref="int"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Download(string id, int DocumentID)
         {
             if (!string.IsNullOrEmpty(Convert.ToString(id)) && !string.IsNullOrEmpty(Convert.ToString(DocumentID)))
@@ -192,19 +238,27 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The InsertExpenseAudit
+        /// </summary>
+        /// <param name="TimeSheetApproval">The TimeSheetApproval<see cref="ExpenseApprovalModel"/></param>
+        /// <param name="Status">The Status<see cref="int"/></param>
+        /// <returns>The <see cref="ExpenseAuditTB"/></returns>
         private ExpenseAuditTB InsertExpenseAudit(ExpenseApprovalModel TimeSheetApproval, int Status)
         {
             try
             {
-                ExpenseAuditTB objAuditTB = new ExpenseAuditTB();
-                objAuditTB.ApprovaExpenselLogID = 0;
-                objAuditTB.ExpenseID = TimeSheetApproval.ExpenseID;
-                objAuditTB.Status = Status;
-                objAuditTB.CreatedOn = DateTime.Now;
-                objAuditTB.Comment = TimeSheetApproval.Comment;
-                objAuditTB.ApprovalUser = Convert.ToInt32(Session["AdminUser"]);
-                objAuditTB.ProcessedDate = DateTime.Now;
-                objAuditTB.UserID = _IUsers.GetUserIDbyExpenseID(TimeSheetApproval.ExpenseID);
+                ExpenseAuditTB objAuditTB = new ExpenseAuditTB
+                {
+                    ApprovaExpenselLogID = 0,
+                    ExpenseID = TimeSheetApproval.ExpenseID,
+                    Status = Status,
+                    CreatedOn = DateTime.Now,
+                    Comment = TimeSheetApproval.Comment,
+                    ApprovalUser = Convert.ToInt32(Session["AdminUser"]),
+                    ProcessedDate = DateTime.Now,
+                    UserID = _IUsers.GetUserIDbyExpenseID(TimeSheetApproval.ExpenseID)
+                };
                 return objAuditTB;
             }
             catch (Exception)
@@ -213,22 +267,37 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
-
+        /// <summary>
+        /// The SubmittedExpense
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult SubmittedExpense()
         {
             return View();
         }
 
+        /// <summary>
+        /// The ApprovedExpense
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult ApprovedExpense()
         {
             return View();
         }
 
+        /// <summary>
+        /// The RejectedExpense
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult RejectedExpense()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadExpenseSubmittedData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadExpenseSubmittedData()
         {
             try
@@ -254,10 +323,12 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
-
+        /// <summary>
+        /// The LoadExpenseApprovedData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadExpenseApprovedData()
         {
             try
@@ -283,9 +354,12 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The LoadExpenseRejectedData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadExpenseRejectedData()
         {
             try
@@ -311,7 +385,6 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
     }
 }

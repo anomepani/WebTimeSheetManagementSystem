@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="DocumentConcrete" />
+    /// </summary>
     public class DocumentConcrete : IDocument
     {
+        /// <summary>
+        /// The AddDocument
+        /// </summary>
+        /// <param name="Documents">The Documents<see cref="Documents"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int AddDocument(Documents Documents)
         {
             try
@@ -39,7 +45,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
-        public Documents GetDocumentByExpenseID(int? ExpenseID ,int? DocumentID)
+        /// <summary>
+        /// The GetDocumentByExpenseID
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int?"/></param>
+        /// <param name="DocumentID">The DocumentID<see cref="int?"/></param>
+        /// <returns>The <see cref="Documents"/></returns>
+        public Documents GetDocumentByExpenseID(int? ExpenseID, int? DocumentID)
         {
             try
             {
@@ -58,6 +70,11 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The GetListofDocumentByExpenseID
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int?"/></param>
+        /// <returns>The <see cref="List{DocumentsVM}"/></returns>
         public List<DocumentsVM> GetListofDocumentByExpenseID(int? ExpenseID)
         {
             try
@@ -66,9 +83,10 @@ namespace WebTimeSheetManagement.Concrete
                 {
                     var tempDocument = (from document in _context.Documents
                                         where document.ExpenseID == ExpenseID
-                                        select new DocumentsVM {
+                                        select new DocumentsVM
+                                        {
                                             DocumentID = document.DocumentID,
-                                            DocumentName = document.DocumentName ,
+                                            DocumentName = document.DocumentName,
                                             ExpenseID = document.ExpenseID,
                                             DocumentType = document.DocumentType
 
@@ -82,7 +100,5 @@ namespace WebTimeSheetManagement.Concrete
                 throw;
             }
         }
-
-
     }
 }

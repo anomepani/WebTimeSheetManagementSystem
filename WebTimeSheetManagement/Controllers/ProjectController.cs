@@ -1,30 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="ProjectController" />
+    /// </summary>
     [ValidateSuperAdminSession]
     public class ProjectController : Controller
     {
-        IProject _IProject;
+        /// <summary>
+        /// Defines the _IProject
+        /// </summary>
+        private readonly IProject _IProject;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectController"/> class.
+        /// </summary>
         public ProjectController()
         {
             _IProject = new ProjectConcrete();
         }
 
         // GET: Project
+        /// <summary>
+        /// The Add
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult Add()
         {
             return View();
         }
 
+        /// <summary>
+        /// The CheckProjectCodeExists
+        /// </summary>
+        /// <param name="ProjectCode">The ProjectCode<see cref="string"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult CheckProjectCodeExists(string ProjectCode)
         {
             try
@@ -51,6 +69,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The CheckProjectNameExists
+        /// </summary>
+        /// <param name="ProjectName">The ProjectName<see cref="string"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult CheckProjectNameExists(string ProjectName)
         {
             try
@@ -69,7 +92,7 @@ namespace WebTimeSheetManagement.Controllers
                 else
                 {
                     return Json(data: false);
-                } 
+                }
             }
             catch (Exception)
             {
@@ -77,6 +100,11 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The Add
+        /// </summary>
+        /// <param name="ProjectMaster">The ProjectMaster<see cref="ProjectMaster"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(ProjectMaster ProjectMaster)
@@ -96,12 +124,20 @@ namespace WebTimeSheetManagement.Controllers
             return View(ProjectMaster);
         }
 
+        /// <summary>
+        /// The Index
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// The LoadProjectData
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult LoadProjectData()
         {
             try
@@ -127,9 +163,13 @@ namespace WebTimeSheetManagement.Controllers
             {
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// The Delete
+        /// </summary>
+        /// <param name="ProjectID">The ProjectID<see cref="string"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult Delete(string ProjectID)
         {
             try
@@ -143,7 +183,7 @@ namespace WebTimeSheetManagement.Controllers
 
                 var isExistsinExpense = _IProject.CheckProjectIDExistsInExpense(Convert.ToInt32(ProjectID));
 
-                if (isExistsinTimesheet == false && isExistsinExpense == false)
+                if (!isExistsinTimesheet && !isExistsinExpense)
                 {
                     var data = _IProject.ProjectDelete(Convert.ToInt32(ProjectID));
 
@@ -166,7 +206,5 @@ namespace WebTimeSheetManagement.Controllers
                 throw;
             }
         }
-
-
     }
 }

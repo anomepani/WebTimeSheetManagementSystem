@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-using System.Linq.Dynamic;
-using System.Data.Entity.SqlServer;
-
-namespace WebTimeSheetManagement.Concrete
+﻿namespace WebTimeSheetManagement.Concrete
 {
+    using System;
+    using System.Data.Entity.SqlServer;
+    using System.Linq;
+    using System.Linq.Dynamic;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="NotificationConcrete" />
+    /// </summary>
     public class NotificationConcrete : INotification
     {
+        /// <summary>
+        /// The AddNotification
+        /// </summary>
+        /// <param name="entity">The entity<see cref="NotificationsTB"/></param>
+        /// <returns>The <see cref="int"/></returns>
         public int AddNotification(NotificationsTB entity)
         {
             try
@@ -28,6 +33,9 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The DisableExistingNotifications
+        /// </summary>
         public void DisableExistingNotifications()
         {
             try
@@ -43,6 +51,13 @@ namespace WebTimeSheetManagement.Concrete
             }
         }
 
+        /// <summary>
+        /// The ShowNotifications
+        /// </summary>
+        /// <param name="sortColumn">The sortColumn<see cref="string"/></param>
+        /// <param name="sortColumnDir">The sortColumnDir<see cref="string"/></param>
+        /// <param name="Search">The Search<see cref="string"/></param>
+        /// <returns>The <see cref="IQueryable{NotificationsTB_ViewModel}"/></returns>
         public IQueryable<NotificationsTB_ViewModel> ShowNotifications(string sortColumn, string sortColumnDir, string Search)
         {
             var _context = new DatabaseContext();
@@ -59,7 +74,7 @@ namespace WebTimeSheetManagement.Concrete
                                                Status = notification.Status,
                                                FromDate = SqlFunctions.DateName("day", notification.FromDate).Trim() + "/" +
                           SqlFunctions.StringConvert((double)notification.FromDate.Value.Month).TrimStart() + "/" +
-                          SqlFunctions.DateName("year", notification.FromDate) + " " + SqlFunctions.DateName("hh", notification.FromDate).Trim() +":" + SqlFunctions.DateName("n", notification.FromDate).Trim() + ":" + SqlFunctions.DateName("s", notification.FromDate).Trim(),
+                          SqlFunctions.DateName("year", notification.FromDate) + " " + SqlFunctions.DateName("hh", notification.FromDate).Trim() + ":" + SqlFunctions.DateName("n", notification.FromDate).Trim() + ":" + SqlFunctions.DateName("s", notification.FromDate).Trim(),
                                                ToDate = SqlFunctions.DateName("day", notification.ToDate).Trim() + "/" +
                           SqlFunctions.StringConvert((double)notification.ToDate.Value.Month).TrimStart() + "/" +
                           SqlFunctions.DateName("year", notification.ToDate) + " " + SqlFunctions.DateName("hh", notification.ToDate).Trim() + ":" + SqlFunctions.DateName("n", notification.ToDate).Trim() + ":" + SqlFunctions.DateName("s", notification.ToDate).Trim(),
@@ -77,9 +92,13 @@ namespace WebTimeSheetManagement.Concrete
             }
 
             return IQueryableNotifications;
-
         }
 
+        /// <summary>
+        /// The DeActivateNotificationByID
+        /// </summary>
+        /// <param name="NotificationID">The NotificationID<see cref="int"/></param>
+        /// <returns>The <see cref="bool"/></returns>
         public bool DeActivateNotificationByID(int NotificationID)
         {
             try

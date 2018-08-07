@@ -1,28 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+
+    /// <summary>
+    /// Defines the <see cref="UserController" />
+    /// </summary>
     [ValidateUserSession]
     public class UserController : Controller
     {
-        private ITimeSheet _ITimeSheet;
-        private IExpense _IExpense;
+        /// <summary>
+        /// Defines the _ITimeSheet
+        /// </summary>
+        private readonly ITimeSheet _ITimeSheet;
 
+        /// <summary>
+        /// Defines the _IExpense
+        /// </summary>
+        private readonly IExpense _IExpense;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
         public UserController()
         {
             _ITimeSheet = new TimeSheetConcrete();
             _IExpense = new ExpenseConcrete();
         }
 
-
         // GET: User
+        /// <summary>
+        /// The Dashboard
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult Dashboard()
         {
@@ -41,7 +54,6 @@ namespace WebTimeSheetManagement.Controllers
                 ViewBag.RejectedTimesheetCount = 0;
             }
 
-
             var expenseResult = _IExpense.GetExpenseAuditCountByUserID(Convert.ToString(Session["UserID"]));
 
             if (expenseResult != null)
@@ -59,6 +71,5 @@ namespace WebTimeSheetManagement.Controllers
 
             return View();
         }
-
     }
 }

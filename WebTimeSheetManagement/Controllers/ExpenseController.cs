@@ -1,23 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.IO;
+    using System.Web;
+    using System.Web.Mvc;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="ExpenseController" />
+    /// </summary>
     [ValidateUserSession]
     public class ExpenseController : Controller
     {
-        IExpense _IExpense;
-        IDocument _IDocument;
-        IProject _IProject;
-        IUsers _IUsers;
+        /// <summary>
+        /// Defines the _IExpense
+        /// </summary>
+        private readonly IExpense _IExpense;
+
+        /// <summary>
+        /// Defines the _IDocument
+        /// </summary>
+        private readonly IDocument _IDocument;
+
+        /// <summary>
+        /// Defines the _IProject
+        /// </summary>
+        private readonly IProject _IProject;
+
+        /// <summary>
+        /// Defines the _IUsers
+        /// </summary>
+        private readonly IUsers _IUsers;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExpenseController"/> class.
+        /// </summary>
         public ExpenseController()
         {
             _IExpense = new ExpenseConcrete();
@@ -27,11 +47,20 @@ namespace WebTimeSheetManagement.Controllers
         }
 
         // GET: Expense
+        /// <summary>
+        /// The Add
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Add()
         {
             return View(new ExpenseModel());
         }
 
+        /// <summary>
+        /// The Add
+        /// </summary>
+        /// <param name="expensemodel">The expensemodel<see cref="ExpenseModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult Add(ExpenseModel expensemodel)
         {
@@ -74,7 +103,6 @@ namespace WebTimeSheetManagement.Controllers
                                                 Documents.CreatedOn = DateTime.Now;
                                             }
 
-
                                             Documents.ExpenseID = ExpenseID;
                                             Documents.UserID = Convert.ToInt32(Session["UserID"]);
                                             if (Path.GetExtension(file.FileName) == ".zip" || Path.GetExtension(file.FileName) == ".rar")
@@ -113,6 +141,10 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The ListofProjects
+        /// </summary>
+        /// <returns>The <see cref="JsonResult"/></returns>
         public JsonResult ListofProjects()
         {
             try
@@ -126,19 +158,27 @@ namespace WebTimeSheetManagement.Controllers
             }
         }
 
+        /// <summary>
+        /// The InsertExpenseAudit
+        /// </summary>
+        /// <param name="ExpenseID">The ExpenseID<see cref="int"/></param>
+        /// <param name="Status">The Status<see cref="int"/></param>
+        /// <returns>The <see cref="ExpenseAuditTB"/></returns>
         private ExpenseAuditTB InsertExpenseAudit(int ExpenseID, int Status)
         {
             try
             {
-                ExpenseAuditTB objAuditTB = new ExpenseAuditTB();
-                objAuditTB.ApprovaExpenselLogID = 0;
-                objAuditTB.ExpenseID = ExpenseID;
-                objAuditTB.Status = Status;
-                objAuditTB.CreatedOn = DateTime.Now;
-                objAuditTB.Comment = string.Empty;
-                objAuditTB.ApprovalUser = _IUsers.GetAdminIDbyUserID(Convert.ToInt32(Session["UserID"]));
-                objAuditTB.ProcessedDate = DateTime.Now;
-                objAuditTB.UserID = Convert.ToInt32(Session["UserID"]);
+                ExpenseAuditTB objAuditTB = new ExpenseAuditTB
+                {
+                    ApprovaExpenselLogID = 0,
+                    ExpenseID = ExpenseID,
+                    Status = Status,
+                    CreatedOn = DateTime.Now,
+                    Comment = string.Empty,
+                    ApprovalUser = _IUsers.GetAdminIDbyUserID(Convert.ToInt32(Session["UserID"])),
+                    ProcessedDate = DateTime.Now,
+                    UserID = Convert.ToInt32(Session["UserID"])
+                };
                 return objAuditTB;
             }
             catch (Exception)

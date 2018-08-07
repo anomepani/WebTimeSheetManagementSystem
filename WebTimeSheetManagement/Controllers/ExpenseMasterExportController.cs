@@ -1,36 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using WebTimeSheetManagement.Concrete;
-using WebTimeSheetManagement.Filters;
-using WebTimeSheetManagement.Interface;
-using WebTimeSheetManagement.Models;
-
-namespace WebTimeSheetManagement.Controllers
+﻿namespace WebTimeSheetManagement.Controllers
 {
+    using System;
+    using System.Data;
+    using System.IO;
+    using System.Web.Mvc;
+    using System.Web.UI;
+    using System.Web.UI.WebControls;
+    using WebTimeSheetManagement.Concrete;
+    using WebTimeSheetManagement.Filters;
+    using WebTimeSheetManagement.Interface;
+    using WebTimeSheetManagement.Models;
+
+    /// <summary>
+    /// Defines the <see cref="ExpenseMasterExportController" />
+    /// </summary>
     [ValidateSuperAdminSession]
     public class ExpenseMasterExportController : Controller
     {
+        /// <summary>
+        /// Defines the _IExpenseExport
+        /// </summary>
+        private readonly IExpenseExport _IExpenseExport;
 
-        IExpenseExport _IExpenseExport;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExpenseMasterExportController"/> class.
+        /// </summary>
         public ExpenseMasterExportController()
         {
             _IExpenseExport = new ExpenseExportConcrete();
         }
 
         // GET: ExpenseExport
+        /// <summary>
+        /// The Report
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Report()
         {
             return View(new ExpenseExcelExportModel());
         }
 
         // GET: TimeSheetExport
+        /// <summary>
+        /// The ExportToExcel
+        /// </summary>
+        /// <param name="objexpense">The objexpense<see cref="ExpenseExcelExportModel"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult ExportToExcel(ExpenseExcelExportModel objexpense)
         {
@@ -38,7 +53,6 @@ namespace WebTimeSheetManagement.Controllers
             DataTable dt = new DataTable();
             try
             {
-
                 if (!ModelState.IsValid)
                 {
                     return View("Report", objexpense);
@@ -77,7 +91,6 @@ namespace WebTimeSheetManagement.Controllers
                         {
                             for (int i = 0; i < singlelist.Tables[0].Rows.Count; i++)
                             {
-
                                 DataRow row = dt.NewRow();
                                 row["Name"] = Convert.ToString(singlelist.Tables[0].Rows[i]["Name"]);
                                 row["ProjectName"] = Convert.ToString(singlelist.Tables[0].Rows[i]["ProjectName"]);
@@ -100,8 +113,10 @@ namespace WebTimeSheetManagement.Controllers
                             }
 
                             ds.Tables.Add(dt);
-                            var gv = new GridView();
-                            gv.DataSource = ds;
+                            var gv = new GridView
+                            {
+                                DataSource = ds
+                            };
                             gv.DataBind();
                             Response.ClearContent();
                             Response.Buffer = true;
