@@ -122,7 +122,7 @@
                             Response.Buffer = true;
                             Response.AddHeader("content-disposition", "attachment; filename=ExpenseSheet.xls");
                             Response.ContentType = "application/ms-excel";
-                            Response.Charset = "";
+                            Response.Charset = string.Empty;
                             StringWriter objStringWriter = new StringWriter();
                             HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
                             gv.RenderControl(objHtmlTextWriter);

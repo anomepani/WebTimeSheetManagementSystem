@@ -17,7 +17,6 @@
         public void ConfigureAuth(IAppBuilder app)
         {
 
-
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.

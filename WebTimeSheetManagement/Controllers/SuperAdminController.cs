@@ -139,7 +139,7 @@
 
                 if (isUsernameExists)
                 {
-                    ModelState.AddModelError("", errorMessage: "Username Already Used try unique one!");
+                    ModelState.AddModelError(string.Empty, errorMessage: "Username Already Used try unique one!");
                 }
                 else
                 {

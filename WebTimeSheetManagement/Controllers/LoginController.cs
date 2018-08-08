@@ -84,7 +84,7 @@
                         else
                         {
                             var RoleID = result.RoleID;
-                            Remove_Anonymous_Cookies(); //Remove Anonymous_Cookies
+                            Remove_Anonymous_Cookies(); // Remove Anonymous_Cookies
 
                             Session["RoleID"] = Convert.ToString(result.RoleID);
                             Session["Username"] = Convert.ToString(result.Username);
@@ -159,7 +159,7 @@
 
                 HttpCookie Cookies = new HttpCookie("WebTime")
                 {
-                    Value = "",
+                    Value = string.Empty,
                     Expires = DateTime.Now.AddHours(-1)
                 };
                 Response.Cookies.Add(Cookies);

@@ -33,7 +33,7 @@
         {
             AuditTB objaudit = new AuditTB(); // Getting Action Name 
 
-            string actionName = filterContext.ActionDescriptor.ActionName; //Getting Controller Name 
+            string actionName = filterContext.ActionDescriptor.ActionName; // Getting Controller Name 
             string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             var request = filterContext.HttpContext.Request;
 
@@ -47,7 +47,7 @@
             }
             else
             {
-                objaudit.UserID = "";
+                objaudit.UserID = string.Empty;
             }
 
             objaudit.SessionID = HttpContext.Current.Session.SessionID; // Application SessionID // User IPAddress 

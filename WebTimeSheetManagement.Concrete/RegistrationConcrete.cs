@@ -29,14 +29,7 @@
                                   where user.Username == Username
                                   select user).Count();
 
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
             }
             catch (Exception)
@@ -116,14 +109,7 @@
                     param.Add("@RegistrationID", RegistrationID);
                     param.Add("@Password", Password);
                     var result = con.Execute("Usp_UpdatePasswordbyRegistrationID", param, null, 0, System.Data.CommandType.StoredProcedure);
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
             }
             catch (Exception)

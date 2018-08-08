@@ -95,28 +95,28 @@
                                 DataRow row = dt.NewRow();
                                 row["TotalHours"] = Convert.ToString(singlelist.Tables[0].Rows[i]["TotalHours"]);
                                 row["Name"] = Convert.ToString(singlelist.Tables[0].Rows[i]["Name"]);
-                                row["ProjectName"] = "";
-                                row["DaysofWeek"] = "";
-                                row["Hours"] = "";
-                                row["Period"] = "";
-                                row["CreatedOn"] = "";
+                                row["ProjectName"] = string.Empty;
+                                row["DaysofWeek"] = string.Empty;
+                                row["Hours"] = string.Empty;
+                                row["Period"] = string.Empty;
+                                row["CreatedOn"] = string.Empty;
                                 dt.Rows.Add(row);
 
                                 DataRow row1 = dt.NewRow();
-                                row1["TotalHours"] = "";
-                                row1["Name"] = "";
-                                row1["ProjectName"] = "";
-                                row1["DaysofWeek"] = "";
-                                row1["Hours"] = "";
-                                row1["Period"] = "";
-                                row1["CreatedOn"] = "";
+                                row1["TotalHours"] = string.Empty;
+                                row1["Name"] = string.Empty;
+                                row1["ProjectName"] = string.Empty;
+                                row1["DaysofWeek"] = string.Empty;
+                                row1["Hours"] = string.Empty;
+                                row1["Period"] = string.Empty;
+                                row1["CreatedOn"] = string.Empty;
                                 dt.Rows.Add(row1);
 
                                 for (int j = 0; j < multi.Tables[0].Rows.Count; j++)
                                 {
                                     DataRow row2 = dt.NewRow();
-                                    row2["TotalHours"] = "";
-                                    row2["Name"] = "";
+                                    row2["TotalHours"] = string.Empty;
+                                    row2["Name"] = string.Empty;
                                     row2["ProjectName"] = Convert.ToString(multi.Tables[0].Rows[j]["ProjectName"]);
                                     row2["DaysofWeek"] = Convert.ToString(multi.Tables[0].Rows[j]["DaysofWeek"]);
                                     row2["Hours"] = Convert.ToString(multi.Tables[0].Rows[j]["Hours"]);
@@ -136,7 +136,7 @@
                             Response.Buffer = true;
                             Response.AddHeader("content-disposition", "attachment; filename=TimeSheetDetails.xls");
                             Response.ContentType = "application/ms-excel";
-                            Response.Charset = "";
+                            Response.Charset = string.Empty;
                             StringWriter objStringWriter = new StringWriter();
                             HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
                             gv.RenderControl(objHtmlTextWriter);
@@ -208,7 +208,6 @@
                         }
                         else
                         {
-
                             for (int k = 0; k < timesheetdata.Tables[0].Rows.Count; k++)
                             {
                                 var timesheetID = Convert.ToInt32(timesheetdata.Tables[0].Rows[k]["TimeSheetMasterID"]);
@@ -222,20 +221,20 @@
                                 }
 
                                 DataRow row2 = dt.NewRow();
-                                row2["ProjectName"] = "";
-                                row2["Sunday"] = "";
-                                row2["Monday"] = "";
-                                row2["Tuesday"] = "";
-                                row2["Wednesday"] = "";
-                                row2["Thursday"] = "";
-                                row2["Friday"] = "";
-                                row2["Saturday"] = "";
-                                row2["Total"] = "";
-                                row2["Description"] = "";
+                                row2["ProjectName"] = string.Empty;
+                                row2["Sunday"] = string.Empty;
+                                row2["Monday"] = string.Empty;
+                                row2["Tuesday"] = string.Empty;
+                                row2["Wednesday"] = string.Empty;
+                                row2["Thursday"] = string.Empty;
+                                row2["Friday"] = string.Empty;
+                                row2["Saturday"] = string.Empty;
+                                row2["Total"] = string.Empty;
+                                row2["Description"] = string.Empty;
                                 dt.Rows.Add(row2);
 
                                 DataRow row = dt.NewRow();
-                                row["ProjectName"] = "";
+                                row["ProjectName"] = string.Empty;
                                 row["Sunday"] = data[0].Period;
                                 row["Monday"] = data[1].Period;
                                 row["Tuesday"] = data[2].Period;
@@ -243,13 +242,13 @@
                                 row["Thursday"] = data[4].Period;
                                 row["Friday"] = data[5].Period;
                                 row["Saturday"] = data[6].Period;
-                                row["Total"] = "";
-                                row["Description"] = "";
+                                row["Total"] = string.Empty;
+                                row["Description"] = string.Empty;
                                 dt.Rows.Add(row);
 
                                 var ListofProjectNames = _ITimeSheet.GetProjectNamesbyTimeSheetMasterID(Convert.ToInt32(timesheetID));
 
-                                for (int i = 0; i < ListofProjectNames.Count(); i++)
+                                for (int i = 0; i < ListofProjectNames.Count; i++)
                                 {
                                     var ListofHours = MethodonViews.GetHoursbyTimeSheetMasterID(timesheetID, ListofProjectNames[i].ProjectID);
                                     var ListofDescription = WebTimeSheetManagement.Helpers.MethodonViews.GetDescriptionbyTimeSheetMasterID(timesheetID, ListofProjectNames[i].ProjectID);
@@ -277,7 +276,7 @@
                             Response.Buffer = true;
                             Response.AddHeader("content-disposition", "attachment; filename=" + filename.Trim() + ".xls");
                             Response.ContentType = "application/ms-excel";
-                            Response.Charset = "";
+                            Response.Charset = string.Empty;
                             StringWriter objStringWriter = new StringWriter();
                             HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
                             gv.RenderControl(objHtmlTextWriter);

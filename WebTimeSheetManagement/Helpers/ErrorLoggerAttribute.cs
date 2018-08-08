@@ -14,10 +14,10 @@
         /// <summary>
         /// The OnException
         /// </summary>
-        /// <param name="filterContext">The filterContext<see cref="ExceptionContext"/></param>
+        /// <param name="filterContext">The filterContext<see cref="ExceptionContext" /></param>
         public override void OnException(ExceptionContext filterContext)
         {
-            string strLogText = "";
+            string strLogText = string.Empty;
             Exception ex = filterContext.Exception;
             filterContext.ExceptionHandled = true;
             var objClass = filterContext;
@@ -41,11 +41,11 @@
             strLogText += Environment.NewLine + "TargetSite ---\n{0}" + ex.TargetSite;
             if (ex.InnerException != null)
             {
-                strLogText += Environment.NewLine + "Inner Exception is {0}" + ex.InnerException;//error prone
+                strLogText += Environment.NewLine + "Inner Exception is {0}" + ex.InnerException; // error prone
             }
             if (ex.HelpLink != null)
             {
-                strLogText += Environment.NewLine + "HelpLink ---\n{0}" + ex.HelpLink;//error prone
+                strLogText += Environment.NewLine + "HelpLink ---\n{0}" + ex.HelpLink; // error prone
             }
 
             StreamWriter log;
@@ -59,13 +59,13 @@
                 System.IO.Directory.CreateDirectory(error_folder);
             }
 
-            if (!File.Exists(String.Format(@"{0}\Log_{1}.txt", error_folder, timestamp)))
+            if (!File.Exists(string.Format(@"{0}\Log_{1}.txt", error_folder, timestamp)))
             {
-                log = new StreamWriter(String.Format(@"{0}\Log_{1}.txt", error_folder, timestamp));
+                log = new StreamWriter(string.Format(@"{0}\Log_{1}.txt", error_folder, timestamp));
             }
             else
             {
-                log = File.AppendText(String.Format(@"{0}\Log_{1}.txt", error_folder, timestamp));
+                log = File.AppendText(string.Format(@"{0}\Log_{1}.txt", error_folder, timestamp));
             }
 
             var controllerName = (string)filterContext.RouteData.Values["controller"];

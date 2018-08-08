@@ -122,7 +122,7 @@
                     return Json(false);
                 }
 
-                _IExpense.UpdateExpenseStatus(expenseapprovalmodel, 2); //Approve
+                _IExpense.UpdateExpenseStatus(expenseapprovalmodel, 2); // Approve
 
                 if (_IExpense.IsExpenseALreadyProcessed(expenseapprovalmodel.ExpenseID))
                 {

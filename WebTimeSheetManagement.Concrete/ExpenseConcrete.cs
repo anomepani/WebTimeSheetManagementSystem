@@ -76,14 +76,7 @@
                     param.Add("@UserID", UserID);
 
                     var result = con.Query<int>("Usp_CheckIsDateAlreadyUsed", param, null, false, 0, System.Data.CommandType.StoredProcedure).SingleOrDefault();
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
             }
             catch (Exception)
@@ -159,14 +152,7 @@
                             where expense.ExpenseID == ExpenseID && expense.UserID == UserID
                             select expense).Count();
 
-                if (data > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return data > 0;
             }
         }
 
@@ -619,14 +605,7 @@
                             where timesheet.ExpenseID == ExpenseID && timesheet.Status != 1
                             select timesheet).Count();
 
-                if (data > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return data > 0;
             }
         }
 

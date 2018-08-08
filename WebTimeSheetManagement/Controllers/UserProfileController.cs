@@ -65,13 +65,13 @@
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Something Went Wrong Please try Again after some time");
+                        ModelState.AddModelError(string.Empty, "Something Went Wrong Please try Again after some time");
                         return View(changepasswordmodel);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Entered Wrong Old Password");
+                    ModelState.AddModelError(string.Empty, "Entered Wrong Old Password");
                     return View(changepasswordmodel);
                 }
             }

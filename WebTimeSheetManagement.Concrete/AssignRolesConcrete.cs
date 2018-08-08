@@ -27,7 +27,7 @@
                 try
                 {
                     var result = con.Query<AdminModel>("Usp_GetListofAdmins", null, null, true, 0, System.Data.CommandType.StoredProcedure).ToList();
-                    result.Insert(0, new AdminModel { Name = "----Select----", RegistrationID = "" });
+                    result.Insert(0, new AdminModel { Name = "----Select----", RegistrationID = string.Empty});
                     return result;
                 }
                 catch (Exception)
@@ -133,14 +133,7 @@
                     var param = new DynamicParameters();
                     param.Add("@RegistrationID", RegistrationID);
                     var result = con.Execute("Usp_UpdateUserRole", param, null, 0, System.Data.CommandType.StoredProcedure);
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
                 catch (Exception)
                 {
@@ -182,7 +175,7 @@
             {
                 try
                 {
-                    for (int i = 0; i < AssignRolesModel.ListofUser.Count(); i++)
+                    for (int i = 0; i < AssignRolesModel.ListofUser.Count; i++)
                     {
                         if (AssignRolesModel.ListofUser[i].selectedUsers)
                         {
@@ -227,14 +220,7 @@
                                  select assignUser).Count();
             }
 
-            if (IsassignCount > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return IsassignCount > 0;
         }
     }
 }

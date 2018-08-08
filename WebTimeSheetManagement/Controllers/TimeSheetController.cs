@@ -61,7 +61,7 @@
             {
                 if (timesheetmodel == null)
                 {
-                    ModelState.AddModelError("", "Values Posted Are Not Accurate");
+                    ModelState.AddModelError(string.Empty, "Values Posted Are Not Accurate");
                     return View();
                 }
 
@@ -323,7 +323,6 @@
                     var DaysofWeek7 = timesheetmodel.DaysofWeek7;
                     var value7 = timesheetmodel.text7_p1;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID1, TimeSheetMasterID);
-
                 }
 
                 if (timesheetmodel.ProjectID2 != null && (timesheetmodel.texttotal_p2 != null && timesheetmodel.texttotal_p2 != 0))
@@ -362,7 +361,6 @@
                     var DaysofWeek7 = timesheetmodel.DaysofWeek7;
                     var value7 = timesheetmodel.text7_p2;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID2, TimeSheetMasterID);
-
                 }
 
                 if (timesheetmodel.ProjectID3 != null && (timesheetmodel.texttotal_p3 != null && timesheetmodel.texttotal_p3 != 0))
@@ -401,7 +399,6 @@
                     var DaysofWeek7 = timesheetmodel.DaysofWeek7;
                     var value7 = timesheetmodel.text7_p3;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID3, TimeSheetMasterID);
-
                 }
 
                 if (timesheetmodel.ProjectID4 != null && (timesheetmodel.texttotal_p4 != null && timesheetmodel.texttotal_p4 != 0))
@@ -440,7 +437,6 @@
                     var DaysofWeek7 = timesheetmodel.DaysofWeek7;
                     var value7 = timesheetmodel.text7_p4;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID4, TimeSheetMasterID);
-
                 }
 
                 if (timesheetmodel.ProjectID5 != null && (timesheetmodel.texttotal_p5 != null && timesheetmodel.texttotal_p5 != 0))
@@ -479,7 +475,6 @@
                     var DaysofWeek7 = timesheetmodel.DaysofWeek7;
                     var value7 = timesheetmodel.text7_p5;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID5, TimeSheetMasterID);
-
                 }
 
                 if (timesheetmodel.ProjectID6 != null && (timesheetmodel.texttotal_p6 != null && timesheetmodel.texttotal_p6 != 0))
@@ -518,7 +513,6 @@
                     var DaysofWeek7 = timesheetmodel.DaysofWeek7;
                     var value7 = timesheetmodel.text7_p6;
                     SaveTimeSheetDetail(DaysofWeek7, value7, date7, timesheetmodel.ProjectID6, TimeSheetMasterID);
-
                 }
             }
             catch (Exception)

@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Data.Entity;
     using System.Data.Entity.Core.Objects;
     using System.Data.Entity.SqlServer;
     using System.Data.SqlClient;
@@ -79,14 +80,7 @@
                                   where timesheetdetails.Period == FromDate && timesheetdetails.UserID == UserID
                                   select timesheetdetails).Count();
 
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
             }
             catch (Exception)
@@ -252,22 +246,22 @@
                                            TimeSheetMasterID = timesheetmaster.TimeSheetMasterID,
                                            FromDate =
                 (
-                     EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.FromDate)), 4)
+                     DbFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.FromDate)), 4)
 
                                             + "-"
-                    + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.FromDate))), 2)
+                    + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.FromDate))), 2)
                         + "-"
-                        + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
+                        + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
                        ).Replace(" ", "0"),
 
                                            ToDate =
                      (
-                     EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
+                     DbFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
 
                                             + "-"
-                    + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.ToDate))), 2)
+                    + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.ToDate))), 2)
                         + "-"
-                        + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.ToDate))), 2)
+                        + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.ToDate))), 2)
                        ).Replace(" ", "0"),
 
                                            CreatedOn = SqlFunctions.DateName("day", timesheetmaster.CreatedOn).Trim() + "/" +
@@ -275,7 +269,7 @@
                    SqlFunctions.DateName("year", timesheetmaster.CreatedOn),
                                            TotalHours = timesheetmaster.TotalHours,
                                            Username = registration.Username,
-                                           SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate).ToString()
+                                           SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate)
 
                                        });
 
@@ -524,22 +518,22 @@
                                            TimeSheetMasterID = timesheetmaster.TimeSheetMasterID,
                                            FromDate =
                 (
-                     EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.FromDate)), 4)
+                     DbFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.FromDate)), 4)
 
                                             + "-"
-                    + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.FromDate))), 2)
+                    + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.FromDate))), 2)
                         + "-"
-                        + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
+                        + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
                        ).Replace(" ", "0"),
 
                                            ToDate =
                      (
-                     EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
+                     DbFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
 
                                             + "-"
-                    + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.ToDate))), 2)
+                    + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.ToDate))), 2)
                         + "-"
-                        + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.ToDate))), 2)
+                        + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.ToDate))), 2)
                        ).Replace(" ", "0"),
 
                                            CreatedOn = SqlFunctions.DateName("day", timesheetmaster.CreatedOn).Trim() + "/" +
@@ -547,7 +541,7 @@
                    SqlFunctions.DateName("year", timesheetmaster.CreatedOn),
                                            TotalHours = timesheetmaster.TotalHours,
                                            Username = registration.Username,
-                                           SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate).ToString()
+                                           SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate)
 
                                        });
 
@@ -587,22 +581,22 @@
                                            TimeSheetMasterID = timesheetmaster.TimeSheetMasterID,
                                            FromDate =
                 (
-                     EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.FromDate)), 4)
+                     DbFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.FromDate)), 4)
 
                                             + "-"
-                    + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.FromDate))), 2)
+                    + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.FromDate))), 2)
                         + "-"
-                        + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
+                        + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
                        ).Replace(" ", "0"),
 
                                            ToDate =
                      (
-                     EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
+                     DbFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
 
                                             + "-"
-                    + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.ToDate))), 2)
+                    + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.ToDate))), 2)
                         + "-"
-                        + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.ToDate))), 2)
+                        + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.ToDate))), 2)
                        ).Replace(" ", "0"),
 
                                            CreatedOn = SqlFunctions.DateName("day", timesheetmaster.CreatedOn).Trim() + "/" +
@@ -610,7 +604,7 @@
                    SqlFunctions.DateName("year", timesheetmaster.CreatedOn),
                                            TotalHours = timesheetmaster.TotalHours,
                                            Username = registration.Username,
-                                           SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate).ToString()
+                                           SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate)
 
                                        });
 
@@ -650,22 +644,22 @@
                                            TimeSheetMasterID = timesheetmaster.TimeSheetMasterID,
                                            FromDate =
                 (
-                     EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.FromDate)), 4)
+                     DbFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.FromDate)), 4)
 
                                             + "-"
-                    + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.FromDate))), 2)
+                    + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.FromDate))), 2)
                         + "-"
-                        + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
+                        + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.FromDate))), 2)
                        ).Replace(" ", "0"),
 
                                            ToDate =
                      (
-                     EntityFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
+                     DbFunctions.Right(SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("yyyy", timesheetmaster.ToDate)), 4)
 
                                             + "-"
-                    + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.ToDate))), 2)
+                    + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("mm", timesheetmaster.ToDate))), 2)
                         + "-"
-                        + EntityFunctions.Right(String.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.ToDate))), 2)
+                        + DbFunctions.Right(string.Concat(" ", SqlFunctions.StringConvert((double?)SqlFunctions.DatePart("dd", timesheetmaster.ToDate))), 2)
                        ).Replace(" ", "0"),
 
                                            CreatedOn = SqlFunctions.DateName("day", timesheetmaster.CreatedOn).Trim() + "/" +
@@ -673,7 +667,7 @@
                    SqlFunctions.DateName("year", timesheetmaster.CreatedOn),
                                            TotalHours = timesheetmaster.TotalHours,
                                            Username = registration.Username,
-                                           SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate).ToString()
+                                           SubmittedMonth = SqlFunctions.DateName("MONTH", timesheetmaster.ToDate)
 
                                        });
 
@@ -802,14 +796,7 @@
                             where timesheet.TimeSheetID == TimeSheetID && timesheet.Status != 1
                             select timesheet).Count();
 
-                if (data > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return data > 0;
             }
         }
     }

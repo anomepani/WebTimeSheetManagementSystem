@@ -30,14 +30,7 @@
                                   where user.ProjectCode == ProjectCode
                                   select user).Count();
 
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
             }
             catch (Exception)
@@ -61,14 +54,7 @@
                                   where user.ProjectName == ProjectName
                                   select user).Count();
 
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
             }
             catch (Exception)
@@ -160,14 +146,7 @@
                                   where timesheet.ProjectID == ProjectID
                                   select timesheet).Count();
 
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
             }
             catch (Exception)
@@ -191,14 +170,7 @@
                                   where expense.ProjectID == ProjectID
                                   select expense).Count();
 
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return result > 0;
                 }
             }
             catch (Exception)

@@ -50,7 +50,7 @@
                         if (dependency == null)
                         {
                             dependency = new SqlDependency(command);
-                            dependency.OnChange += new OnChangeEventHandler(dependency_OnChange);
+                            dependency.OnChange += dependency_OnChange;
                         }
 
                         if (connection.State == ConnectionState.Closed)
@@ -61,8 +61,8 @@
                             messages.Add(item: new NotificationsTB
                             {
                                 NotificationsID = (int)reader["NotificationsID"],
-                                Status = reader["Status"] != DBNull.Value ? (string)reader["Status"] : "",
-                                Message = reader["Message"] != DBNull.Value ? (string)reader["Message"] : ""
+                                Status = reader["Status"] != DBNull.Value ? (string)reader["Status"] : string.Empty,
+                                Message = reader["Message"] != DBNull.Value ? (string)reader["Message"] : string.Empty
                             });
                         }
                     }

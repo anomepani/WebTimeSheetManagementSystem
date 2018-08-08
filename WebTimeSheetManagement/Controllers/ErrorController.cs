@@ -22,7 +22,7 @@
 
             HttpCookie Cookies = new HttpCookie("WebTime")
             {
-                Value = "",
+                Value = string.Empty,
                 Expires = DateTime.Now.AddHours(-1)
             };
             Response.Cookies.Add(Cookies);

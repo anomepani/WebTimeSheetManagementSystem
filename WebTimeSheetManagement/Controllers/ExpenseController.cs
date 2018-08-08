@@ -72,7 +72,7 @@
 
                     if (_IExpense.CheckIsDateAlreadyUsed(expensemodel.FromDate, expensemodel.ToDate, Convert.ToInt32(Session["UserID"])))
                     {
-                        ModelState.AddModelError("", "Date you have choosen is already used !");
+                        ModelState.AddModelError(string.Empty, "Date you have choosen is already used !");
                         return View(expensemodel);
                     }
                     else
@@ -125,7 +125,7 @@
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Please Upload Required Attachments");
+                            ModelState.AddModelError(string.Empty, "Please Upload Required Attachments");
                             return View(expensemodel);
                         }
 

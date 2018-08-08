@@ -39,12 +39,12 @@
         /// <summary>
         /// Gets or sets the LoggedInAt
         /// </summary>
-        public Nullable<System.DateTime> LoggedInAt { get; set; }
+        public DateTime? LoggedInAt { get; set; }
 
         /// <summary>
         /// Gets or sets the LoggedOutAt
         /// </summary>
-        public Nullable<System.DateTime> LoggedOutAt { get; set; }
+        public DateTime? LoggedOutAt { get; set; }
 
         /// <summary>
         /// Gets or sets the LoginStatus

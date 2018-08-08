@@ -118,15 +118,17 @@
         [NonAction]
         public List<string> DayofWeek()
         {
-            List<string> li = new List<string>();
-            li.Add("Sunday");
-            li.Add("Monday");
-            li.Add("Tuesday");
-            li.Add("Wednesday");
-            li.Add("Thursday");
-            li.Add("Friday");
-            li.Add("Saturday");
-            li.Add("Total");
+            List<string> li = new List<string>
+            {
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Total"
+            };
             return li;
         }
 
@@ -149,7 +151,7 @@
                     return Json(false);
                 }
 
-                _ITimeSheet.UpdateTimeSheetStatus(TimeSheetApproval, 2); //Approve
+                _ITimeSheet.UpdateTimeSheetStatus(TimeSheetApproval, 2); // Approve
 
                 if (_ITimeSheet.IsTimesheetALreadyProcessed(TimeSheetApproval.TimeSheetMasterID))
                 {
@@ -187,7 +189,7 @@
                     return Json(false);
                 }
 
-                _ITimeSheet.UpdateTimeSheetStatus(TimeSheetApproval, 3); //Reject
+                _ITimeSheet.UpdateTimeSheetStatus(TimeSheetApproval, 3); // Reject
 
                 if (_ITimeSheet.IsTimesheetALreadyProcessed(TimeSheetApproval.TimeSheetMasterID))
                 {

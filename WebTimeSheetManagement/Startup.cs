@@ -5,7 +5,6 @@ using Microsoft.Owin;
 namespace WebTimeSheetManagement
 {
 
-
     /// <summary>
     /// Defines the <see cref="Startup" />
     /// </summary>
